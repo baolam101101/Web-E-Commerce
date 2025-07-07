@@ -3,13 +3,10 @@ using Web_E_Commerce.Data;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Interfaces;
 
-
 namespace Web_E_Commerce.Repositories.Implementations
 {
-    public class ProductRepository(AppDbContext context) : IProductRepository
+    public class ProductRepository(AppDbContext _context) : IProductRepository
     {
-        private readonly AppDbContext _context = context;
-
         public async Task<IEnumerable<Product>> GetAllAsync() =>
             await _context.Products.Include(p => p.Category).ToListAsync();
 

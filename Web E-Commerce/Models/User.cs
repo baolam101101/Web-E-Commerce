@@ -10,5 +10,7 @@ namespace Web_E_Commerce.Models
         public byte[] PasswordSalt { get; set; } = [];
 
         public UserRole Role { get; set; } = UserRole.User;
+
+        public ICollection<Order>? Orders { get; set; } = [];
     }
 }

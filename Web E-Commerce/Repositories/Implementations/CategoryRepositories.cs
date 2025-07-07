@@ -5,10 +5,8 @@ using Web_E_Commerce.Repositories.Interfaces;
 
 namespace Web_E_Commerce.Repositories.Implementations
 {
-    public class CategoryRepositories(AppDbContext context) : ICategoryRepositories
+    public class CategoryRepositories(AppDbContext _context) : ICategoryRepositories
     {
-        private readonly AppDbContext _context = context;
-
         public async Task<IEnumerable<Category>> GetAllAsync() => await _context.Categories.ToListAsync();
 
         public async Task<Category?> GetByIdAsync(int id) => await _context.Categories.FindAsync(id);
