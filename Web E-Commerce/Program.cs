@@ -40,9 +40,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Add DI
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
+
+// Add AutoMapper
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // Add Policy
 builder.Services.AddAuthorization(options =>
