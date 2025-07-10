@@ -28,10 +28,11 @@ namespace Web_E_Commerce.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Product product)
+        public async Task<bool> DeleteAsync(Product product)
         {
             _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            return result > 0; // trả về true nếu có thay đổi
         }
     }
 }

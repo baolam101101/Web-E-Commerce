@@ -8,6 +8,6 @@ namespace Web_E_Commerce.Repositories.Interfaces
         Task<Product?> GetByIdAsync(int id);
         Task<Product> CreateAsync(Product product);
         Task UpdateAsync(Product product);
-        Task DeleteAsync(Product product);
+        Task<bool> DeleteAsync(Product product);
     }
 }

@@ -50,8 +50,11 @@ namespace Web_E_Commerce.Services.Implementations
         {
             var product = await productRepository.GetByIdAsync(id);
             if (product == null) return false;
-            await productRepository.DeleteAsync(product);
-            return true;
+
+            // Lấy kết quả từ repository
+            var result = await productRepository.DeleteAsync(product);
+            return result;
         }
+
     }
 }

@@ -11,6 +11,7 @@ namespace Web_E_Commerce.Mapping
         {
             CreateMap<ProductCreateRequest, Product>();
             CreateMap<Product, ProductCreateResponse>();
+            CreateMap<Product, ProductUpdateResponse>();
         }
     }
 }
