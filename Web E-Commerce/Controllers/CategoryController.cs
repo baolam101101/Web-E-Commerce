@@ -56,7 +56,7 @@ namespace Web_E_Commerce.Controllers
             return Ok(new ApiResponse<CategoryResponse>("Get category detail successfully!", response));
         }
 
-        [Authorize(Policy = nameof(UserRole.Admin))]
+        //[Authorize(Policy = nameof(UserRole.Admin))]
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateRequest categoryCreateRequest)
         {
@@ -74,7 +74,7 @@ namespace Web_E_Commerce.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, new ApiResponse<CategoryCreateResponse>("Category created successfully!", response));
         }
 
-        [Authorize(Policy = nameof(UserRole.Admin))]
+        //[Authorize(Policy = nameof(UserRole.Admin))]
         [HttpPut("id")]
         public async Task<IActionResult> Update(int id, Category category)
         {
@@ -84,7 +84,7 @@ namespace Web_E_Commerce.Controllers
             return Ok(new { message = "You have updated successfully!", category});
         }
 
-        [Authorize(Policy = nameof(UserRole.Admin))]
+        //[Authorize(Policy = nameof(UserRole.Admin))]
         [HttpDelete("id")]
         public async Task<IActionResult> Delete (int id)
         {

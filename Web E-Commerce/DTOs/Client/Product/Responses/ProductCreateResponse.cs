@@ -1,15 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Web_E_Commerce.DTOs.Category.Responses;
 
-namespace Web_E_Commerce.DTOs.Product.Requests
+namespace Web_E_Commerce.DTOs.Client.Product.Responses
 {
-    public class ProductUpdateRequest
+    public class ProductCreateResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        [Range(1, double.MaxValue)]
         public decimal Price { get; set; }
-        [Url]
         public string ImageUrl { get; set; } = string.Empty;
-        public int CategoryId { get; set; }
+        public CategoryResponse? Category { get; set; }
     }
 }

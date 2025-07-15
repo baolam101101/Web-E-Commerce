@@ -13,6 +13,12 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -29,5 +35,9 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
+
+<Target Name="CopyTesthostDeps" AfterTargets="Build">
+  <Copy SourceFiles="..\Web E-Commerce\bin\Debug\net8.0\Web E-Commerce.deps.json" DestinationFiles="$(OutputPath)testhost.deps.json" SkipUnchangedFiles="true" />
+</Target>
 
 </Project>

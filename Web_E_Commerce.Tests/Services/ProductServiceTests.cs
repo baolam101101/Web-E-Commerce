@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Moq;
-using Web_E_Commerce.DTOs.Product.Requests;
+using Web_E_Commerce.DTOs.Client.Product.Requests;
 using Web_E_Commerce.Mapping;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Interfaces;
@@ -52,7 +52,6 @@ namespace Web_E_Commerce.Tests.Services
                 Name = request.Name,
                 Description = request.Description,
                 Price = request.Price,
-                ImageUrl = request.ImageUrl,
                 CategoryId = request.CategoryId
             };
 

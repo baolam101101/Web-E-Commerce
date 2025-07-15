@@ -17,7 +17,7 @@ namespace Web_E_Commerce.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -228,11 +228,14 @@ namespace Web_E_Commerce.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -243,6 +246,12 @@ namespace Web_E_Commerce.Migrations
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -284,6 +293,82 @@ namespace Web_E_Commerce.Migrations
                     b.ToTable("ProductReviews");
                 });
 
+            modelBuilder.Entity("Web_E_Commerce.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Customer"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Seller"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Moderator"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Manager"
+                        });
+                });
+
+            modelBuilder.Entity("Web_E_Commerce.Models.SellerRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ShopName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SellerRequests");
+                });
+
             modelBuilder.Entity("Web_E_Commerce.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -292,15 +377,22 @@ namespace Web_E_Commerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PasswordSalt")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -311,6 +403,67 @@ namespace Web_E_Commerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "",
+                            FullName = "",
+                            PasswordHash = "$2a$11$ZPgnNHpYC752EuWswo0sou/EioWdGUjMm6FWpTuAgvxltlo9hUZqy",
+                            PhoneNumber = "",
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "",
+                            FullName = "",
+                            PasswordHash = "$2a$11$uHTN1jEeNa/b3Dgi71vi9u8sYGrZt0giqFhFBGXTiiFCke3FNOyVO",
+                            PhoneNumber = "",
+                            UserName = "moderator"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "",
+                            FullName = "",
+                            PasswordHash = "$2a$11$SKTGxSGZxOWvznH8Vq9DpeqeZmt65Cw67dqLiH6tcvBjk/eI07ST2",
+                            PhoneNumber = "",
+                            UserName = "manager"
+                        });
+                });
+
+            modelBuilder.Entity("Web_E_Commerce.Models.UserRole", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            RoleId = 4
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            RoleId = 5
+                        });
                 });
 
             modelBuilder.Entity("Web_E_Commerce.Models.Address", b =>
@@ -357,7 +510,7 @@ namespace Web_E_Commerce.Migrations
             modelBuilder.Entity("Web_E_Commerce.Models.Order", b =>
                 {
                     b.HasOne("Web_E_Commerce.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -425,6 +578,36 @@ namespace Web_E_Commerce.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Web_E_Commerce.Models.SellerRequest", b =>
+                {
+                    b.HasOne("Web_E_Commerce.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Web_E_Commerce.Models.UserRole", b =>
+                {
+                    b.HasOne("Web_E_Commerce.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Web_E_Commerce.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Web_E_Commerce.Models.Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -438,6 +621,18 @@ namespace Web_E_Commerce.Migrations
             modelBuilder.Entity("Web_E_Commerce.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Web_E_Commerce.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Web_E_Commerce.Models.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

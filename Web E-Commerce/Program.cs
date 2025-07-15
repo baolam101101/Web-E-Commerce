@@ -47,14 +47,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
 
-// Add AutoMapper
+// Add Service
 builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 
 // Add Policy
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPoliciesFromEnum<UserRole>();
-});
+
 
 builder.Services.AddCors(options =>
 {

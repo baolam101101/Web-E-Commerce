@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
-using Web_E_Commerce.DTOs.Product.Requests;
-using Web_E_Commerce.DTOs.Product.Responses;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Web_E_Commerce.DTOs.Client.Product.Requests;
+using Web_E_Commerce.DTOs.Client.Product.Responses;
+using Web_E_Commerce.DTOs.Shared;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Services.Interfaces;
@@ -11,11 +14,25 @@ namespace Web_E_Commerce.Services.Implementations
         IProductRepository productRepository,
         IMapper mapper) : IProductService
     {
-        public async Task<IEnumerable<ProductCreateResponse>> GetAllAsync(int page, int pageSize)
+        public async Task<PaginationWrapper<ProductCreateResponse>> GetAllAsync(int page, int pageSize)
         {
-            var all = await productRepository.GetAllAsync();
-            var paged = all.Skip((page - 1) * pageSize).Take(pageSize);
-            return mapper.Map<IEnumerable<ProductCreateResponse>>(paged);
+            var query = productRepository.GetAllQueryable(); // Trả về IQueryable<Product>
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var mapped = mapper.Map<IEnumerable<ProductCreateResponse>>(items);
+
+            return new PaginationWrapper<ProductCreateResponse>(
+                page,
+                pageSize,
+                totalItems,
+                mapped
+            );
         }
 
         public async Task<ProductCreateResponse?> GetByIdAsync(int id)
@@ -38,7 +55,7 @@ namespace Web_E_Commerce.Services.Implementations
 
             existing.Name = request.Name;
             existing.Description = request.Description;
-            existing.ImageUrl = request.ImageUrl;
+            //existing.ImageUrl = request.ImageUrl;
             existing.Price = request.Price;
             existing.CategoryId = request.CategoryId;
 
@@ -55,6 +72,5 @@ namespace Web_E_Commerce.Services.Implementations
             var result = await productRepository.DeleteAsync(product);
             return result;
         }
-
     }
 }

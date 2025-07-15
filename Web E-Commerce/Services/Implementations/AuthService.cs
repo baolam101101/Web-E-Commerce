@@ -11,72 +11,61 @@ using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Services.Implementations
 {
-    public class AuthService : IAuthService
+    public class AuthService(AppDbContext context, IConfiguration config) : IAuthService
     {
-        private readonly AppDbContext _context;
-        private readonly IConfiguration _config;
-
-        public AuthService(AppDbContext context, IConfiguration config)
-        {
-            _context = context;
-            _config = config;
-        }
-
         public async Task<bool> UserExists(string username) =>
-            await _context.Users.AnyAsync(u => u.UserName == username);
+            await context.Users.AnyAsync(u => u.UserName == username);
 
-        public async Task<User> Register(string username, string password, UserRole role)
+        public async Task<User> Register(string username, string password)
         {
-            CreatePasswordHash(password, out byte[] hash, out byte[] salt);
             var user = new User
             {
                 UserName = username,
-                PasswordHash = hash,
-                PasswordSalt = salt,
-                Role = role
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
             };
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+
+            var customerRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == "Customer") ?? throw new Exception("Default role 'Customer' not found");
+
+            user.UserRoles = [new UserRole { RoleId = customerRole.Id }];
+
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
             return user;
         }
 
         public async Task<string?> Login(string username, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
-            if (user == null || !VerifyPassword(password, user.PasswordHash, user.PasswordSalt)) return null;
+            var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash)) return null;
 
             return CreateAccessToken(user);
         }
 
-        // Helpers
-        private void CreatePasswordHash(string password, out byte[] hash, out byte[] salt)
-        {
-            using var hmac = new HMACSHA512();
-            salt = hmac.Key;
-            hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        }
-
-        private bool VerifyPassword(string password, byte[] hash, byte[] salt)
-        {
-            using var hmac = new HMACSHA512(salt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return computedHash.SequenceEqual(hash);
-        }
-
+        // Helper method to create JWT access token
         private string CreateAccessToken(User user)
         {
-            var claims = new[]
+            var roles = context.UserRoles
+                .Include(ur => ur.Role)
+                .Where(ur => ur.UserId == user.Id)
+                .Select(ur => ur.Role.Name)
+                .ToList();
+
+            var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new(ClaimTypes.Name, user.UserName),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var accessToken = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
+                issuer: config["Jwt:Issuer"],
+                audience: config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds

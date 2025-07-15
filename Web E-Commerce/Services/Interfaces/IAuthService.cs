@@ -6,7 +6,7 @@ namespace Web_E_Commerce.Services.Interfaces
     public interface IAuthService
     {
         Task<bool> UserExists(string username);
-        Task<User> Register(string username, string password, UserRole role);
+        Task<User> Register(string username, string password);
         Task<string?> Login(string username, string password);
     }
 }

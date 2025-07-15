@@ -1,4 +1,4 @@
-﻿namespace Web_E_Commerce.DTOs.Product.Requests
+﻿namespace Web_E_Commerce.DTOs.Client.Product.Requests
 {
     public class ProductCreateRequest
     {

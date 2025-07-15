@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web_E_Commerce.DTOs.Product.Requests;
-using Web_E_Commerce.DTOs.Product.Responses;
+using Web_E_Commerce.DTOs.Client.Product.Requests;
+using Web_E_Commerce.DTOs.Client.Product.Responses;
 using Web_E_Commerce.DTOs.Shared;
 using Web_E_Commerce.Enums;
 using Web_E_Commerce.Services.Interfaces;
@@ -12,13 +12,13 @@ namespace Web_E_Commerce.Controllers
     [Route("api/v1/[controller]")]
     public class ProductController(IProductService productService) : ControllerBase
     {
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 10)
-        {
-            var products = await productService.GetAllAsync(page, pageSize);
-            return Ok(new ApiResponse<IEnumerable<ProductCreateResponse>>("Fetched successfully", products));
-        }
+        //[AllowAnonymous]
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll(int page = 1, int pageSize = 10)
+        //{
+        //    var products = await productService.GetAllAsync(page, pageSize);
+        //    return Ok(new ApiResponse<IEnumerable<ProductCreateResponse>>("Fetched successfully", products));
+        //}
 
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -30,7 +30,7 @@ namespace Web_E_Commerce.Controllers
                 : Ok(new ApiResponse<ProductCreateResponse>("Success", product));
         }
 
-        [Authorize(Policy = nameof(UserRole.Admin))]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCreateRequest request)
         {
@@ -38,7 +38,7 @@ namespace Web_E_Commerce.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, new ApiResponse<ProductCreateResponse>("Created", created));
         }
 
-        [Authorize(Policy = nameof(UserRole.Admin))]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ProductUpdateRequest request)
         {
@@ -48,7 +48,7 @@ namespace Web_E_Commerce.Controllers
                 : Ok(new ApiResponse<ProductUpdateResponse>("Updated", updated));
         }
 
-        [Authorize(Policy = nameof(UserRole.Admin))]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

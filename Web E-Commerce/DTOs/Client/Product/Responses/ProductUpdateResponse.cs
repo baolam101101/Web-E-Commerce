@@ -1,8 +1,8 @@
 ﻿using Web_E_Commerce.DTOs.Category.Responses;
 
-namespace Web_E_Commerce.DTOs.Product.Responses
+namespace Web_E_Commerce.DTOs.Client.Product.Responses
 {
-    public class ProductCreateResponse
+    public class ProductUpdateResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
