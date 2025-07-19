@@ -76,9 +76,7 @@ Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
 }
 
 // Add Middleware
-//app.UseCustomExceptionHandling();
-//app.UseMiddleware<ApiResponseMiddleware>();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

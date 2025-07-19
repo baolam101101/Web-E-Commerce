@@ -1,50 +1,75 @@
-﻿//using System.Net;
-//using System.Text.Json;
-//using Microsoft.AspNetCore.Http;
-//using Web_E_Commerce.DTOs.Response;
+﻿using System.Net;
+using System.Text.Json;
+using Web_E_Commerce.DTOs.Shared;
+using Web_E_Commerce.Exceptions;
 
-//namespace Web_E_Commerce.Middlewares
-//{
-//    public class ExceptionHandlingMiddleware(RequestDelegate next)
-//    {
-//        public async Task InvokeAsync(HttpContext context)
-//        {
-//            try
-//            {
-//                await next(context);
-//            }
-//            catch (Exception ex)
-//            {
-//                await HandleExceptionAsync(context, ex);
-//            }
-//        }
+public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+{
+    public async Task Invoke(HttpContext context)
+    {
+        try
+        {
+            await next(context); // tiếp tục middleware pipeline
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Unhandled exception caught");
 
-//        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
-//        {
-//            var statusCode = (int)HttpStatusCode.InternalServerError;
+            await HandleExceptionAsync(context, ex);
+        }
+    }
 
-//            var errorResponse = new ErrorResponse
-//            (
-//                message: "Internal Server Error",
-//                statusCode: statusCode,
-//                details: exception.Message,
-//                code: "INTERNAL_ERROR"
-//            );
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        int statusCode;
+        string code;
+        string message = exception.Message;
+        string? description = null;
 
-//            var json = JsonSerializer.Serialize(errorResponse);
+        // If BaseException then get description
+        if (exception is BaseException baseEx)
+        {
+            description = baseEx.Description;
+        }
 
-//            context.Response.ContentType = "application/json";
-//            context.Response.StatusCode = statusCode;
+        switch (exception)
+        {
+            case NotFoundException:
+                statusCode = (int)HttpStatusCode.NotFound;
+                code = "NOT_FOUND";
+                break;
 
-//            return context.Response.WriteAsync(json);
-//        }
-//    }
+            case BadRequestException:
+                statusCode = (int)HttpStatusCode.BadRequest;
+                code = "BAD_REQUEST";
+                break;
 
-//    public static class ExceptionHandlingMiddlewareExtensions
-//    {
-//        public static IApplicationBuilder UseCustomExceptionHandling(this IApplicationBuilder builder)
-//        {
-//            return builder.UseMiddleware<ExceptionHandlingMiddleware>();
-//        }
-//    }
-//}
+            case UnauthorizedException:
+                statusCode = (int)HttpStatusCode.Unauthorized;
+                code = "UNAUTHORIZED";
+                break;
+
+            case ForbiddenException:
+                statusCode = (int)HttpStatusCode.Forbidden;
+                code = "FORBIDDEN";
+                break;
+
+            case ValidationException ve:
+                statusCode = (int)HttpStatusCode.BadRequest;
+                code = "VALIDATION_ERROR";
+                message = string.Join("; ", ve.Errors);
+                break;
+
+            default:
+                statusCode = (int)HttpStatusCode.InternalServerError;
+                code = "INTERNAL_SERVER_ERROR";
+                break;
+        }
+
+        var response = new ErrorResponse(statusCode, code, message, description);
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = statusCode;
+        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
+}
