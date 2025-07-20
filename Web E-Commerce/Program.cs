@@ -3,13 +3,10 @@ using Web_E_Commerce.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Web_E_Commerce.Enums;
-using Web_E_Commerce.Extensions;
 using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Repositories.Implementations;
 using Web_E_Commerce.Services.Interfaces;
 using Web_E_Commerce.Services.Implementations;
-//using Web_E_Commerce.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +27,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add services to the container.
-builder.Services.AddScoped<IAuthService, AuthService>();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -48,9 +43,14 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
 
 // Add Service
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 //builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+// Add HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 // Add Policy
 
