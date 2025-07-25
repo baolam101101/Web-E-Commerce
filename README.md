@@ -1,57 +1,72 @@
-# 📌 Web E-commerce API
+# 📌 Web E-Commerce API
 
-API cho hệ thống thương mại điện tử mini, xây dựng bằng ASP.NET Core.
-
----
-
-## 📝 Mục tiêu dự án
-
-- Xây dựng API hoàn chỉnh cho trang thương mại điện tử, bao gồm:
-  - Quản lý sản phẩm, danh mục.
-  - Quản lý người dùng, giỏ hàng, đơn hàng.
-  - Xử lý thanh toán (giả lập).
-- Học cách xây dựng RESTful API chuẩn, authentication với JWT, phân quyền user/admin.
-- Thực hành Entity Framework Core, mapping quan hệ, repository pattern.
+A backend RESTful API for a mini e-commerce system, built with ASP.NET Core 8. The project follows Clean Architecture and focuses on scalability, maintainability, and real-world features such as role-based authentication and cart management.
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+## 🧠 Project Goals
 
-- **Backend**: ASP.NET Core 8, Entity Framework Core
-- **Database**: SQL Server
-- **Authentication**: JWT
-- **Môi trường phát triển**: Visual Studio Community 2022
-- **Các thư viện chính**: AutoMapper, Swashbuckle (Swagger), FluentValidation (nếu có).
-
----
-
-## 🗂️ Kiến trúc dự án
-
-- **Models**: Định nghĩa entity như User, Product, Order, OrderItem, v.v.
-- **Data**: AppDbContext quản lý database.
-- **Repositories**: Interfaces & Implementations cho nghiệp vụ CRUD.
-- **Controllers**: API endpoint.
-- **DTOs**: Request/response models.
-- **Middleware**: Xử lý lỗi, JWT auth (nếu có).
+- Design and implement a complete RESTful API for an e-commerce platform
+- Learn and apply:
+  - **Authentication & Authorization** with JWT and role-based access
+  - **Entity Framework Core** and relational data modeling
+  - **Clean Architecture** with Service–Repository layers
+  - **Standardized API responses** and error handling
+- Evolve into a **fullstack project** by developing the client side with React
 
 ---
 
-## 📦 Các chức năng chính đã hoàn thiện
+## 🛠️ Tech Stack
 
-- CRUD sản phẩm, danh mục
-- Đăng ký/đăng nhập người dùng, JWT
-- Quản lý giỏ hàng
-- Đặt đơn hàng, quản lý trạng thái đơn hàng
-- Tính toán tổng tiền đơn hàng
-- API chuẩn REST, trả về kết quả thống nhất (response wrapper).
+- **Backend:** ASP.NET Core 8, Entity Framework Core
+- **Database:** SQL Server
+- **Authentication:** JWT (JSON Web Token)
+- **Object Mapping:** AutoMapper
+- **API Documentation:** Swagger (Swashbuckle)
+- **Validation:** FluentValidation (planned)
+- **Testing:** xUnit, Moq (planned)
+- **Frontend:** ReactJS (in progress)
+- **Development Environment:** Visual Studio 2022
 
 ---
 
-## 🚧 Các chức năng dự kiến phát triển thêm
+## 📁 Project Structure (Simplified)
 
-- Tích hợp gửi mail khi đặt hàng thành công.
-- Tích hợp cổng thanh toán giả lập.
-- Viết unit test cho repository & controller.
-- Hoàn thiện UI với React.
+- `/Models`: Entity definitions (User, Product, Order, etc.)
+- `/Data`: `AppDbContext` and database setup
+- `/Repositories`: Interfaces & implementations for business logic
+- `/Services`: Business logic layer between controllers and repositories
+- `/Controllers`: API endpoints
+- `/DTOs`: Request/response models
+- `/Middleware`: Exception handling, JWT authentication, response wrapping
 
---- 
+---
+
+## ✅ Features Implemented
+
+- User registration & login with JWT authentication
+- Product & category management (CRUD)
+- Cart management and item operations
+- Order placement and status tracking
+- Order total calculation with validation
+- Unified API responses using a standard response wrapper
+- Role-based access (User, Admin, Seller – via database roles)
+- Global exception handling middleware
+
+---
+
+## 🚧 In Progress / Upcoming Features
+
+- Admin dashboard for managing users, roles, and seller requests
+- Seller registration request & approval workflow
+- Email notification after successful order placement
+- Payment gateway integration (mock or third-party)
+- Frontend development with React (client UI)
+- Unit & integration tests using xUnit and WebApplicationFactory
+- Full documentation and deployment guide
+
+---
+
+## 🔗 GitHub
+
+Feel free to explore the source code: [https://github.com/baolam101101/Web-E-Commerce](https://github.com/baolam101101/Web-E-Commerce)
