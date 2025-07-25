@@ -1,6 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Azure.Core;
 using Moq;
 using Web_E_Commerce.DTOs.Client.Product.Requests;
+using Web_E_Commerce.Exceptions;
 using Web_E_Commerce.Mapping;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Interfaces;
@@ -12,12 +15,14 @@ namespace Web_E_Commerce.Tests.Services
     public class ProductServiceTests
     {
         private readonly Mock<IProductRepository> _mockProductRepository;
+        private readonly Mock<ICategoryRepository> _mockCategoryRepository;
         private readonly IMapper _mapper;
         private readonly ProductService _productService;
 
         public ProductServiceTests()
         {
             _mockProductRepository = new Mock<IProductRepository>();
+            _mockCategoryRepository = new Mock<ICategoryRepository>();
 
             // Config AutoMapper
             var config = new MapperConfiguration(cfg =>
@@ -27,7 +32,10 @@ namespace Web_E_Commerce.Tests.Services
             _mapper = config.CreateMapper();
 
             // Init service with mock and mapper
-            _productService = new ProductService(_mockProductRepository.Object, _mapper);
+            _productService = new ProductService(
+                _mockProductRepository.Object,
+                _mockCategoryRepository.Object,
+                _mapper);
         }
 
         // ===========================
@@ -42,8 +50,13 @@ namespace Web_E_Commerce.Tests.Services
                 Name = "Test",
                 Description = "Desc",
                 Price = 100,
-                ImageUrl = "http://img.com",
                 CategoryId = 1
+            };
+
+            var category = new Category
+            {
+                Id = request.CategoryId,
+                Name = "CategoryName"
             };
 
             var createdProduct = new Product
@@ -52,8 +65,14 @@ namespace Web_E_Commerce.Tests.Services
                 Name = request.Name,
                 Description = request.Description,
                 Price = request.Price,
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system"
             };
+
+            _mockCategoryRepository
+                .Setup(repo => repo.GetByIdAsync(request.CategoryId))
+                .ReturnsAsync(category);
 
             _mockProductRepository
                 .Setup(repo => repo.CreateAsync(It.IsAny<Product>()))
@@ -64,7 +83,9 @@ namespace Web_E_Commerce.Tests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("Test", result.Name);
+            Assert.Equal("Product created successfully", result.Message);
+            Assert.Equal("Test", result.Data?.Name);
+            Assert.Equal(100, result.Data?.Price);
         }
 
         // ===========================
@@ -86,7 +107,7 @@ namespace Web_E_Commerce.Tests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(productId, result.Id);
+            Assert.Equal(productId, result.Data?.Id);
         }
 
         [Fact]
@@ -100,10 +121,12 @@ namespace Web_E_Commerce.Tests.Services
                 .ReturnsAsync((Product?)null);
 
             // Act
-            var result = await _productService.GetByIdAsync(productId);
+
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                _productService.GetByIdAsync(productId));
 
             // Assert
-            Assert.Null(result);
+            Assert.Equal("Product not found", exception.Message);
         }
 
         // ===========================
@@ -115,14 +138,24 @@ namespace Web_E_Commerce.Tests.Services
             // Arrange
             var productId = 1;
             var existingProduct = new Product { Id = productId, Name = "Old" };
+
             var request = new ProductUpdateRequest
             {
                 Name = "New Name",
                 Description = "Updated desc",
                 Price = 200,
-                ImageUrl = "http://img.com/updated",
                 CategoryId = 2
             };
+
+            var category = new Category
+            {
+                Id = request.CategoryId,
+                Name = "CategoryName"
+            };
+
+            _mockCategoryRepository
+                .Setup(repo => repo.GetByIdAsync(request.CategoryId))
+                .ReturnsAsync(category);
 
             _mockProductRepository
                 .Setup(repo => repo.GetByIdAsync(productId))
@@ -130,15 +163,18 @@ namespace Web_E_Commerce.Tests.Services
 
             _mockProductRepository
                 .Setup(repo => repo.UpdateAsync(It.IsAny<Product>()))
-                .Returns((Product p) => Task.FromResult(p));
+                .Returns((Product p) => Task.FromResult(p))
+                .Verifiable();
 
             // Act
             var result = await _productService.UpdateAsync(productId, request);
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("New Name", result.Name);
-            Assert.Equal(200, result.Price);
+            Assert.Equal("New Name", result.Data?.Name);
+            Assert.Equal(200, result.Data?.Price);
+
+            _mockProductRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Product>()), Times.Once);
         }
 
         [Fact]
@@ -151,7 +187,6 @@ namespace Web_E_Commerce.Tests.Services
                 Name = "Test",
                 Description = "Desc",
                 Price = 100,
-                ImageUrl = "http://img.com",
                 CategoryId = 1
             };
 
@@ -159,11 +194,12 @@ namespace Web_E_Commerce.Tests.Services
                 .Setup(repo => repo.GetByIdAsync(productId))
                 .ReturnsAsync((Product?)null);
 
-            // Act
-            var result = await _productService.UpdateAsync(productId, request);
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                _productService.UpdateAsync(productId, request));
 
-            // Assert
-            Assert.Null(result);
+            Assert.Equal("Product not found", exception.Message);
+
         }
 
         // ===========================
@@ -188,7 +224,7 @@ namespace Web_E_Commerce.Tests.Services
             var result = await _productService.DeleteAsync(productId);
 
             // Assert
-            Assert.True(result);
+            Assert.True(result.Data);
         }
 
         [Fact]
@@ -202,10 +238,10 @@ namespace Web_E_Commerce.Tests.Services
                 .ReturnsAsync((Product?)null);
 
             // Act
-            var result = await _productService.DeleteAsync(productId);
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() =>
+                _productService.DeleteAsync(productId));
 
-            // Assert
-            Assert.False(result);
+            Assert.Equal("Product not found", exception.Message);
         }
 
         [Fact]
@@ -227,7 +263,7 @@ namespace Web_E_Commerce.Tests.Services
             var result = await _productService.DeleteAsync(productId);
 
             // Assert
-            Assert.False(result);
+            Assert.False(result.Data);
         }
     }
 }

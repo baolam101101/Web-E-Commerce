@@ -6,10 +6,10 @@ namespace Web_E_Commerce.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<PaginationWrapper<ProductCreateResponse>> GetAllAsync(int page, int pageSize);
-        Task<ProductCreateResponse?> GetByIdAsync(int id);
-        Task<ProductCreateResponse> CreateAsync(ProductCreateRequest request);
-        Task<ProductUpdateResponse?> UpdateAsync(int id, ProductUpdateRequest request);
-        Task<bool> DeleteAsync(int id);
+        Task<ApiResponse<PaginationWrapper<ProductResponse>>> GetAllAsync(int page, int pageSize);
+        Task<ApiResponse<ProductResponse?>> GetByIdAsync(int id);
+        Task<ApiResponse<ProductResponse>> CreateAsync(ProductCreateRequest request);
+        Task<ApiResponse<ProductResponse?>> UpdateAsync(int id, ProductUpdateRequest request);
+        Task<ApiResponse<bool>> DeleteAsync(int id);
     }
 }

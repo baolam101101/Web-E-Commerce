@@ -40,7 +40,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add DI
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // Add Service
 builder.Services.AddScoped<IAuthService, AuthService>();
