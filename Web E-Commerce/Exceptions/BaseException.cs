@@ -3,13 +3,13 @@
     public class BaseException : Exception
     {
         public string Key { get; }
-        public string Description { get; }
+        public string? Description { get; }
 
-        public BaseException(string key, string description): base(key)
+        public BaseException(string key, string? description = null)
+            : base(key)
         {
             Key = key;
             Description = description;
         }
     }
-
 }

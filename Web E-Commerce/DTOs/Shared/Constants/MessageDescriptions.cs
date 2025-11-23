@@ -43,5 +43,28 @@
         // ==============================
         public const string SELLER_REQUEST_PENDING = "There is already a pending seller role request for this user.";
         public const string SELLER_REQUEST_SENT = "Seller role request has been sent and is pending approval.";
+
+        // ===== Validation =====
+        public const string VALIDATION_ERROR =
+            "One or more validation errors occurred.";
+
+        // ===== Bad Request =====
+        public const string BAD_REQUEST_ERROR =
+            "The request is invalid or cannot be processed.";
+
+        // ===== Auth / Security =====
+        public const string UNAUTHORIZED =
+            "Authentication is required to access this resource.";
+
+        public const string FORBIDDEN =
+            "You do not have permission to access this resource.";
+
+        // ===== Not Found =====
+        public const string NOT_FOUND =
+            "The requested resource could not be found.";
+
+        // ===== Server =====
+        public const string INTERNAL_SERVER_ERROR =
+            "An unexpected error occurred on the server.";
     }
 }

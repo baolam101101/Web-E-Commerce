@@ -1,75 +1,92 @@
 ﻿using System.Net;
+using System.Reflection;
 using System.Text.Json;
 using Web_E_Commerce.DTOs.Shared;
+using Web_E_Commerce.DTOs.Shared.Constants;
 using Web_E_Commerce.Exceptions;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+public class ExceptionHandlingMiddleware
 {
+    private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+    private static readonly Dictionary<Type, HttpStatusCode> StatusMap = new()
+    {
+        { typeof(NotFoundException), HttpStatusCode.NotFound },
+        { typeof(BadRequestException), HttpStatusCode.BadRequest },
+        { typeof(UnauthorizedException), HttpStatusCode.Unauthorized },
+        { typeof(ForbiddenException), HttpStatusCode.Forbidden },
+        { typeof(ValidationException), HttpStatusCode.BadRequest }
+    };
+
+    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await next(context); // tiếp tục middleware pipeline
+            await _next(context);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unhandled exception caught");
-
+            _logger.LogError(ex, "Unhandled exception caught by middleware");
             await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
-        int statusCode;
-        string code;
-        string message = exception.Message;
+        var exceptionType = ex.GetType();
+
+        // Status
+        var statusCode = StatusMap.TryGetValue(exceptionType, out var code)
+            ? (int)code
+            : (int)HttpStatusCode.InternalServerError;
+
+        string messageKey;
         string? description = null;
 
-        // If BaseException then get description
-        if (exception is BaseException baseEx)
+        if (ex is BaseException baseEx)
         {
-            description = baseEx.Description;
+            messageKey = baseEx.Message;
+            description = baseEx.Description ?? GetDescriptionFromKey(baseEx.Message);
+        }
+        else
+        {
+            messageKey = MessageKeys.INTERNAL_SERVER_ERROR;
+            description = MessageDescriptions.INTERNAL_SERVER_ERROR;
         }
 
-        switch (exception)
+        // Validation
+        if (ex is ValidationException ve)
         {
-            case NotFoundException:
-                statusCode = (int)HttpStatusCode.NotFound;
-                code = "NOT_FOUND";
-                break;
-
-            case BadRequestException:
-                statusCode = (int)HttpStatusCode.BadRequest;
-                code = "BAD_REQUEST";
-                break;
-
-            case UnauthorizedException:
-                statusCode = (int)HttpStatusCode.Unauthorized;
-                code = "UNAUTHORIZED";
-                break;
-
-            case ForbiddenException:
-                statusCode = (int)HttpStatusCode.Forbidden;
-                code = "FORBIDDEN";
-                break;
-
-            case ValidationException ve:
-                statusCode = (int)HttpStatusCode.BadRequest;
-                code = "VALIDATION_ERROR";
-                message = string.Join("; ", ve.Errors);
-                break;
-
-            default:
-                statusCode = (int)HttpStatusCode.InternalServerError;
-                code = "INTERNAL_SERVER_ERROR";
-                break;
+            description = string.Join("; ", ve.Errors);
         }
 
-        var response = new ErrorResponse(statusCode, code, message, description);
+        var response = new ErrorResponse
+        {
+            StatusCode = statusCode,
+            Code = messageKey,
+            Message = messageKey,
+            Description = description
+        };
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
         return context.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
+
+    private static string? GetDescriptionFromKey(string key)
+    {
+        var field = typeof(MessageDescriptions).GetField(
+            key,
+            BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase
+        );
+
+        return field?.GetValue(null)?.ToString();
     }
 }

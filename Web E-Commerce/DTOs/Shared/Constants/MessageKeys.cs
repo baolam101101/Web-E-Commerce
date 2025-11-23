@@ -43,5 +43,21 @@
         // ==============================
         public const string SELLER_REQUEST_PENDING = "SELLER_REQUEST_PENDING";
         public const string SELLER_REQUEST_SENT = "SELLER_REQUEST_SENT";
+
+        // ===== Validation =====
+        public const string VALIDATION_ERROR = "VALIDATION_ERROR";
+
+        // ===== Bad Request =====
+        public const string BAD_REQUEST_ERROR = "BAD_REQUEST_ERROR";
+
+        // ===== Auth / Security =====
+        public const string UNAUTHORIZED = "UNAUTHORIZED";
+        public const string FORBIDDEN = "FORBIDDEN";
+
+        // ===== Not Found =====
+        public const string NOT_FOUND = "NOT_FOUND";
+
+        // ===== Server =====
+        public const string INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
     }
 }
