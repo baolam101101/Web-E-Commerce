@@ -7,6 +7,8 @@ using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Repositories.Implementations;
 using Web_E_Commerce.Services.Interfaces;
 using Web_E_Commerce.Services.Implementations;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +29,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

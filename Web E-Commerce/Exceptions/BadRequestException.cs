@@ -1,6 +1,6 @@
 ﻿namespace Web_E_Commerce.Exceptions
 {
-    public class BadRequestException(string key, string description) : BaseException(key, description)
+    public class BadRequestException(string key, string? description = null) : BaseException(key, description)
     {
     }
 }

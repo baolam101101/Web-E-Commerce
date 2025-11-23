@@ -1,6 +1,14 @@
-﻿namespace Web_E_Commerce.Exceptions;
+﻿using Web_E_Commerce.DTOs.Shared.Constants;
 
-public class ValidationException(IEnumerable<string> errors) : Exception("Validation failed")
+namespace Web_E_Commerce.Exceptions;
+
+public class ValidationException : BaseException
 {
-    public List<string> Errors { get; } = errors.ToList();
+    public List<string> Errors { get; }
+
+    public ValidationException(IEnumerable<string> errors, string? description = null)
+        : base(MessageKeys.VALIDATION_ERROR, description)
+    {
+        Errors = errors.ToList();
+    }
 }
