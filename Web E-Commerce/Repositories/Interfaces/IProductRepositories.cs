@@ -2,7 +2,7 @@
 
 namespace Web_E_Commerce.Repositories.Interfaces
 {
-    public interface IProductRepository
+    public interface IProductRepositories
     {
         // CRUD operations
         Task<IEnumerable<Product>> GetAllAsync();
@@ -10,7 +10,15 @@ namespace Web_E_Commerce.Repositories.Interfaces
         Task<Product> CreateAsync(Product product);
         Task UpdateAsync(Product product);
         Task<bool> DeleteAsync(Product product);
-        // Advanced query
-        IQueryable<Product> GetAllQueryable();
+
+        // Filter
+        Task<(IEnumerable<Product> Items, int TotalCount)> FilterAsync(
+            int? categoryId,
+            string? keyword,
+            decimal? minPrice,
+            decimal? maxPrice,
+            string? sortBy,
+            int page,
+            int pageSize);
     }
 }

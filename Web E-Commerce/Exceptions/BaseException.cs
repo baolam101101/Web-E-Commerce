@@ -1,7 +1,15 @@
 ﻿namespace Web_E_Commerce.Exceptions
 {
-    public abstract class BaseException(string message, string? description = null) : Exception(message)
+    public class BaseException : Exception
     {
-        public virtual string? Description { get; } = description;
+        public string Key { get; }
+        public string Description { get; }
+
+        public BaseException(string key, string description): base(key)
+        {
+            Key = key;
+            Description = description;
+        }
     }
+
 }

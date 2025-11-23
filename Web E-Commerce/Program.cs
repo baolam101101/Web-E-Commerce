@@ -39,8 +39,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add DI
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepositories, ProductRepositories>();
+builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
 
 // Add Service
 builder.Services.AddScoped<IAuthService, AuthService>();
