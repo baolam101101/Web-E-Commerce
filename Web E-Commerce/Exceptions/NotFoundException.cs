@@ -1,6 +1,6 @@
 ﻿namespace Web_E_Commerce.Exceptions
 {
-    public class NotFoundException(string message, string? description = null) : BaseException(message, description)
+    public class NotFoundException(string key, string description) : BaseException(key, description)
     {
     }
 }

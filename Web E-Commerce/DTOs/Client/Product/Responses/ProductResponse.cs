@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web_E_Commerce.DTOs.Client.Product.Requests
+namespace Web_E_Commerce.DTOs.Client.Product.Responses
 {
     public class ProductResponse
     {

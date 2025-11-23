@@ -1,6 +1,6 @@
 ﻿namespace Web_E_Commerce.Exceptions
 {
-    public class UnauthorizedException(string message, string? description = null) : BaseException(message, description)
+    public class UnauthorizedException(string key, string description) : BaseException(key, description)
     {
     }
 }
