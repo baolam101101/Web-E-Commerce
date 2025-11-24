@@ -4,6 +4,7 @@ using Web_E_Commerce.Data;
 using Web_E_Commerce.DTOs.Admin.UserRoles.Requests;
 using Web_E_Commerce.DTOs.Admin.UserRoles.Responses;
 using Web_E_Commerce.DTOs.Shared;
+using Web_E_Commerce.DTOs.Shared.Constants;
 using Web_E_Commerce.Exceptions;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Services.Interfaces;
@@ -19,18 +20,18 @@ namespace Web_E_Commerce.Services.Implementations
                 .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == request.UserId)
                 ?? throw new NotFoundException(
-                    "User not found", 
-                    $"No user with ID {request.UserId} exists in the system.");
+                    MessageKeys.USER_NOT_FOUND, 
+                    MessageDescriptions.USER_NOT_FOUND);
 
             var role = await context.Roles
                 .FirstOrDefaultAsync(r => r.Name == request.RoleName)
                 ?? throw new RoleException(
-                    "Role not found",
-                    $"Role '{request.RoleName}' does not exist in the system.");
+                    MessageKeys.ROLE_NOT_FOUND,
+                    MessageDescriptions.ROLE_NOT_FOUND);
 
             if (user.UserRoles.Any(ur => ur.RoleId == role.Id))
                 throw new BadRequestException(
-                    "User already has this role", 
+                    MessageKeys.USER_ALREADY_HAS_ROLE, 
                     $"User with ID {user.Id} already has the role '{role.Name}'.");
 
             user.UserRoles.Add(new UserRole
@@ -43,7 +44,7 @@ namespace Web_E_Commerce.Services.Implementations
             // Map the user to AssignRoleResponse
             var result = mapper.Map<AssignRoleResponse>(user);
 
-            return new ApiResponse<AssignRoleResponse>("Role assigned successfully", result);
+            return ApiResponse<AssignRoleResponse>.Ok(result, MessageKeys.ROLE_ASSIGN_SUCCESS, MessageDescriptions.ROLE_ASSIGN_SUCCESS);
         }
 
         public async Task<ApiResponse<bool>> RemoveRoleAsync(RemoveRoleRequest request)
@@ -53,18 +54,18 @@ namespace Web_E_Commerce.Services.Implementations
                 .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == request.UserId)
                 ?? throw new NotFoundException(
-                    "User not found",
+                    MessageKeys.USER_NOT_FOUND,
                     $"No user with ID {request.UserId} exists in the system.");
 
             var role = user.UserRoles.FirstOrDefault(ur => ur.Role.Name == request.RoleName)
                 ?? throw new BadRequestException(
-                    "User does not have this role",
+                    MessageKeys.USER_DOES_NOT_HAVE_ROLE,
                     $"User with ID {user.Id} does not have the role '{request.RoleName}' to remove.");
 
             user.UserRoles.Remove(role);
             await context.SaveChangesAsync();
 
-            return new ApiResponse<bool>("Role removed successfully", true);
+            return ApiResponse<bool>.Ok(true, MessageKeys.ROLE_REMOVE_SUCCESS, MessageDescriptions.ROLE_REMOVE_SUCCESS);
         }
 
         public async Task<ApiResponse<List<UserWithRolesResponse>>> GetAllUserWithRolesAsync()
@@ -77,7 +78,7 @@ namespace Web_E_Commerce.Services.Implementations
             // Map the users to UserWithRolesResponse
             var result = mapper.Map<List<UserWithRolesResponse>>(users);
 
-            return new ApiResponse<List<UserWithRolesResponse>>("Get all users with roles successfully", result);
+            return ApiResponse<List<UserWithRolesResponse>>.Ok(result, MessageKeys.GET_ALL_USERS_WITH_ROLES_SUCCESS, MessageDescriptions.GET_ALL_USERS_WITH_ROLES_SUCCESS);
         }
 
         public async Task<ApiResponse<UserWithRolesResponse>> GetUserRolesAsync(int userId)
@@ -87,13 +88,13 @@ namespace Web_E_Commerce.Services.Implementations
                 .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 ?? throw new NotFoundException(
-                    "User not found",
+                    MessageKeys.USER_NOT_FOUND,
                     $"The user with ID {userId} does not exist in the system.");
 
             // Map the user to UserWithRolesResponse
             var result = mapper.Map<UserWithRolesResponse>(user);
 
-            return new ApiResponse<UserWithRolesResponse>("Get user roles successfully", result);
+            return ApiResponse<UserWithRolesResponse>.Ok(result, MessageKeys.GET_USER_ROLES_SUCCESS, MessageDescriptions.GET_USER_ROLES_SUCCESS);
         }
 
         public async Task<ApiResponse<List<RoleDto>>> GetAllRolesAsync()
@@ -101,7 +102,7 @@ namespace Web_E_Commerce.Services.Implementations
             var roles = await context.Roles.ToListAsync();
             var roleDtos = mapper.Map<List<RoleDto>>(roles);
 
-            return new ApiResponse<List<RoleDto>>("Get all roles successfully", roleDtos);
+            return ApiResponse<List<RoleDto>>.Ok(roleDtos, MessageKeys.GET_ALL_ROLES_SUCCESS, MessageDescriptions.GET_ALL_ROLES_SUCCESS);
         }
     }
 }
