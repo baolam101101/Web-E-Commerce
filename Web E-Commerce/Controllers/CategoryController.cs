@@ -6,92 +6,53 @@ using Web_E_Commerce.DTOs.Shared;
 using Web_E_Commerce.Enums;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Interfaces;
+using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class CategoryController(ICategoryRepositories categoryRepositories) : ControllerBase
+    public class CategoryController(ICategoryService categoryService) : ControllerBase
     {
-        private readonly ICategoryRepositories _categoryRepositories = categoryRepositories;
-
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int page = 1, int pageSize = 5)
         {
-            var allCategory = await _categoryRepositories.GetAllAsync();
-
-            var pageCategories = allCategory
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            var pagination = new PaginationWrapper<Category>(
-                items: pageCategories,
-                page: page,
-                pageSize: pageSize,
-                totalItems: allCategory.Count());
-
-            var response = new ApiResponse<PaginationWrapper<Category>>(
-                message: "Get all categories successfully!",
-                data: pagination);
-
+            var response = await categoryService.GetAllAsync(page, pageSize);
             return Ok(response);
         }
 
         [AllowAnonymous]
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var category = await _categoryRepositories.GetByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            var response = new CategoryResponse()
-            {
-                Id = category.Id,
-                Name = category.Name,
-            };
-            return Ok(new ApiResponse<CategoryResponse>("Get category detail successfully!", response));
+            var response = await categoryService.GetByIdAsync(id);
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
         //[Authorize(Policy = nameof(UserRole.Admin))]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryCreateRequest categoryCreateRequest)
+        public async Task<IActionResult> Create(CategoryCreateRequest dto)
         {
-            var category = new Category
-            {
-                Name = categoryCreateRequest.Name
-            };
-            var created = await _categoryRepositories.CreateAsync(category);
-
-            var response = new CategoryCreateResponse()
-            {
-                Id = category.Id,
-                Name = category.Name,
-            };
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, new ApiResponse<CategoryCreateResponse>("Category created successfully!", response));
+            var response = await categoryService.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = response.Data?.Id }, response);
         }
 
-        //[Authorize(Policy = nameof(UserRole.Admin))]
-        [HttpPut("id")]
-        public async Task<IActionResult> Update(int id, Category category)
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, CategoryUpdateRequest dto)
         {
-            category.Id = id;
-
-            await _categoryRepositories.UpdateAsync(category);
-            return Ok(new { message = "You have updated successfully!", category});
+            var response = await categoryService.UpdateAsync(id, dto);
+            return response.Success ? Ok(response) : NotFound(response);
         }
 
-        //[Authorize(Policy = nameof(UserRole.Admin))]
-        [HttpDelete("id")]
-        public async Task<IActionResult> Delete (int id)
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var category = await _categoryRepositories.GetByIdAsync(id);
-            if (category == null) return NotFound();
-            await _categoryRepositories.DeleteAsync(category);
-            return NoContent();
+            var response = await categoryService.DeleteAsync(id);
+            return response.Success ? Ok(response) : NotFound(response);
         }
     }
 }

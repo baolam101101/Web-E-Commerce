@@ -1,12 +1,6 @@
-﻿using System.Security.Claims;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Web_E_Commerce.Data;
 using Web_E_Commerce.DTOs.Seller.Requests;
-using Web_E_Commerce.Models;
-using Web_E_Commerce.Services.Implementations;
 using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Controllers

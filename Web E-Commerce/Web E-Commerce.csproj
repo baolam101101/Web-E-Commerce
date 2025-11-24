@@ -12,9 +12,13 @@
 
   <ItemGroup>
     <Compile Remove="DTOs\Admin\Product\**" />
+    <Compile Remove="DTOs\Seller\Responses\**" />
     <Content Remove="DTOs\Admin\Product\**" />
+    <Content Remove="DTOs\Seller\Responses\**" />
     <EmbeddedResource Remove="DTOs\Admin\Product\**" />
+    <EmbeddedResource Remove="DTOs\Seller\Responses\**" />
     <None Remove="DTOs\Admin\Product\**" />
+    <None Remove="DTOs\Seller\Responses\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +34,6 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\Seller\Responses\" />
   </ItemGroup>
 
 </Project>

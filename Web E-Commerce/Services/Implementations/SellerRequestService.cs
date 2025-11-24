@@ -4,6 +4,7 @@ using Web_E_Commerce.Data;
 using Web_E_Commerce.DTOs.Admin.SellerRequest.Responses;
 using Web_E_Commerce.DTOs.Seller.Requests;
 using Web_E_Commerce.DTOs.Shared;
+using Web_E_Commerce.DTOs.Shared.Constants;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Services.Interfaces;
 
@@ -22,9 +23,10 @@ namespace Web_E_Commerce.Services.Implementations
                 .AnyAsync(r => r.UserId == userId && r.Status == "Pending");
             if (exists)
             {
-                return new ApiResponse<SellerRequestResponse>(
-                    "You already have a pending seller request",
-                    null);
+                return ApiResponse<SellerRequestResponse>.Fail(
+                        MessageKeys.SELLER_REQUEST_PENDING,
+                        MessageDescriptions.SELLER_REQUEST_PENDING
+                );
             }
 
             var request = mapper.Map<SellerRequest>(dto);
@@ -34,7 +36,11 @@ namespace Web_E_Commerce.Services.Implementations
             await context.SaveChangesAsync();
 
             var result = mapper.Map<SellerRequestResponse>(request);
-            return new ApiResponse<SellerRequestResponse>("Request sent", result);
+            return ApiResponse<SellerRequestResponse>.Ok(
+                result,
+                MessageKeys.SELLER_REQUEST_SENT,
+                MessageDescriptions.SELLER_REQUEST_SENT
+            );
         }
     }
 }
