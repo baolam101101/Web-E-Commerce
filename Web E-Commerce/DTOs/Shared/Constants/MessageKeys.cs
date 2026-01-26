@@ -37,6 +37,11 @@
         public const string CREATE_CATEGORY_SUCCESS = "CREATE_CATEGORY_SUCCESS";
         public const string UPDATE_CATEGORY_SUCCESS = "UPDATE_CATEGORY_SUCCESS";
         public const string DELETE_CATEGORY_SUCCESS = "DELETE_CATEGORY_SUCCESS";
+        public const string CATEGORY_ALREADY_INACTIVE = "CATEGORY_ALREADY_INACTIVE";
+        public const string CATEGORY_ALREADY_ACTIVE = "CATEGORY_ALREADY_ACTIVE";
+        public const string DEACTIVATE_CATEGORY_SUCCESS = "DEACTIVATE_CATEGORY_SUCCESS";
+        public const string ACTIVATE_CATEGORY_SUCCESS = "ACTIVATE_CATEGORY_SUCCESS";
+
 
         // ==============================
         // Seller Request Related Keys

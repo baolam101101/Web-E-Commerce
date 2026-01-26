@@ -14,11 +14,18 @@ namespace Web_E_Commerce.Services.Implementations
     public class CategoryService(ICategoryRepositories categoryRepositories,
         IMapper mapper) : ICategoryService
     {
-        public async Task<ApiResponse<PaginationWrapper<CategoryResponse>>> GetAllAsync(int page, int pageSize)
+        public async Task<ApiResponse<PaginationWrapper<CategoryResponse>>> GetAllAsync(int page, int pageSize, bool includeInactive)
         {
-            var allCategory = await categoryRepositories.GetAllAsync();
+            page = page <= 0 ? 1 : page;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
 
-            var pageCategories = allCategory
+            var categories = includeInactive
+                ? await categoryRepositories.GetAllAsync() // Admin
+                : await categoryRepositories.GetAllActiveAsync(); // Client
+
+            var totalItems = categories.Count();
+
+            var pageCategories = categories
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -26,10 +33,11 @@ namespace Web_E_Commerce.Services.Implementations
             var mapped = mapper.Map<IEnumerable<CategoryResponse>>(pageCategories);
 
             var pagination = new PaginationWrapper<CategoryResponse>(
-                items: mapped,
                 page: page,
                 pageSize: pageSize,
-                totalItems: allCategory.Count());
+                totalItems,
+                items: mapped
+            );
 
             return ApiResponse<PaginationWrapper<CategoryResponse>>.Ok(
                 pagination,
@@ -98,11 +106,12 @@ namespace Web_E_Commerce.Services.Implementations
         }
 
         // =========================================
-        // DELETE CATEGORY
+        // DEACTIVE CATEGORY
         // =========================================
-        public async Task<ApiResponse<bool>> DeleteAsync(int id)
+        public async Task<ApiResponse<bool>> DeactivateAsync(int id)
         {
             var category = await categoryRepositories.GetByIdAsync(id);
+
             if (category == null)
             {
                 return ApiResponse<bool>.Fail(
@@ -111,13 +120,59 @@ namespace Web_E_Commerce.Services.Implementations
                 );
             }
 
-            await categoryRepositories.DeleteAsync(category);
+            if (!category.IsActive)
+            {
+                return ApiResponse<bool>.Ok(
+                    true,
+                    MessageKeys.CATEGORY_ALREADY_INACTIVE,
+                    MessageDescriptions.CATEGORY_ALREADY_INACTIVE
+                );
+            }
+
+            category.IsActive = false;
+            await categoryRepositories.UpdateAsync(category);
 
             return ApiResponse<bool>.Ok(
                 true,
-                MessageKeys.DELETE_CATEGORY_SUCCESS,
-                MessageDescriptions.DELETE_CATEGORY_SUCCESS
+                MessageKeys.DEACTIVATE_CATEGORY_SUCCESS,
+                MessageDescriptions.DEACTIVATE_CATEGORY_SUCCESS
             );
         }
+
+        // =========================================
+        // ACTIVE CATEGORY
+        // =========================================
+        public async Task<ApiResponse<bool>> ActivateAsync(int id)
+        {
+            var category = await categoryRepositories.GetByIdAsync(id);
+
+            if (category == null)
+            {
+                return ApiResponse<bool>.Fail(
+                    MessageKeys.CATEGORY_NOT_FOUND,
+                    MessageDescriptions.CATEGORY_NOT_FOUND
+                );
+            }
+
+            if (category.IsActive)
+            {
+                return ApiResponse<bool>.Ok(
+                    true,
+                    MessageKeys.CATEGORY_ALREADY_ACTIVE,
+                    MessageDescriptions.CATEGORY_ALREADY_ACTIVE
+                );
+            }
+
+            category.IsActive = true;
+            await categoryRepositories.UpdateAsync(category);
+
+            return ApiResponse<bool>.Ok(
+                true,
+                MessageKeys.ACTIVATE_CATEGORY_SUCCESS,
+                MessageDescriptions.ACTIVATE_CATEGORY_SUCCESS
+            );
+        }
+
+
     }
 }

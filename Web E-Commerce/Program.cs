@@ -53,7 +53,7 @@ builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
 // Add Service
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 

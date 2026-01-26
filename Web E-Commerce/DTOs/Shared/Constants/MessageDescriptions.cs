@@ -36,7 +36,10 @@
         public const string GET_CATEGORY_DETAILS_SUCCESS = "Get category details successfully.";
         public const string CREATE_CATEGORY_SUCCESS = "Category has been created successfully.";
         public const string UPDATE_CATEGORY_SUCCESS = "Category has been updated successfully.";
-        public const string DELETE_CATEGORY_SUCCESS = "Category has been deleted successfully.";
+        public const string CATEGORY_ALREADY_INACTIVE = "The category is already inactive.";
+        public const string CATEGORY_ALREADY_ACTIVE = "The category is already active.";
+        public const string DEACTIVATE_CATEGORY_SUCCESS = "Category has been deactivated successfully.";
+        public const string ACTIVATE_CATEGORY_SUCCESS = "Category has been activated successfully.";
 
         // ==============================
         // Seller Request Related Messages

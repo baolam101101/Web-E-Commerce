@@ -10,7 +10,7 @@ namespace Web_E_Commerce.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class OrderController(IOrderRepositories orderRepositories) : ControllerBase
+    public class OrdersController(IOrderRepositories orderRepositories) : ControllerBase
     {
         private readonly IOrderRepositories _orderRepositories = orderRepositories;
 
