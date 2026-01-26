@@ -6,10 +6,12 @@ namespace Web_E_Commerce.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<ApiResponse<PaginationWrapper<CategoryResponse>>> GetAllAsync(int page, int pageSize);
+        Task<ApiResponse<PaginationWrapper<CategoryResponse>>> GetAllAsync(int page, int pageSize, bool includeInactive);
         Task<ApiResponse<CategoryResponse>> GetByIdAsync(int id);
         Task<ApiResponse<CategoryResponse>> CreateAsync(CategoryCreateRequest request);
         Task<ApiResponse<CategoryResponse>> UpdateAsync(int id, CategoryUpdateRequest request);
-        Task<ApiResponse<bool>> DeleteAsync(int id);
+        Task<ApiResponse<bool>> ActivateAsync(int id);
+        Task<ApiResponse<bool>> DeactivateAsync(int id);
+
     }
 }

@@ -8,7 +8,7 @@ namespace Web_E_Commerce.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ProductController(IProductService productService) : ControllerBase
+    public class ProductsController(IProductService productService) : ControllerBase
     {
         [AllowAnonymous]
         [HttpGet]

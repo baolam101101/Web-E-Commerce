@@ -2,9 +2,8 @@
 
 namespace Web_E_Commerce.Models
 {
-    public class User
+    public class User : BaseEntity
     {
-        public int Id { get; set; }
         // Login
         public string UserName { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;

@@ -9,6 +9,11 @@ namespace Web_E_Commerce.Repositories.Implementations
     {
         public async Task<IEnumerable<Category>> GetAllAsync() => await _context.Categories.ToListAsync();
 
+        public async Task<IEnumerable<Category>> GetAllActiveAsync() 
+            => await _context.Categories
+                .Where(c => c.IsActive) 
+                .ToListAsync();
+
         public async Task<Category?> GetByIdAsync(int id) => await _context.Categories.FindAsync(id);
 
         public async Task<Category> CreateAsync(Category category)
@@ -21,12 +26,6 @@ namespace Web_E_Commerce.Repositories.Implementations
         public async Task UpdateAsync(Category category)
         {
             _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(Category category)
-        {
-            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
         }
     }

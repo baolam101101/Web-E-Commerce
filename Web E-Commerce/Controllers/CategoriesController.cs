@@ -1,26 +1,40 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web_E_Commerce.DTOs.Category.Requests;
-using Web_E_Commerce.DTOs.Category.Responses;
-using Web_E_Commerce.DTOs.Shared;
-using Web_E_Commerce.Enums;
-using Web_E_Commerce.Models;
-using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class CategoryController(ICategoryService categoryService) : ControllerBase
+    public class CategoriesController(ICategoryService categoryService) : ControllerBase
     {
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 10)
         {
-            var response = await categoryService.GetAllAsync(page, pageSize);
-            return Ok(response);
+            var response = await categoryService.GetAllAsync(
+                page,
+                pageSize,
+                includeInactive: false
+            );
+
+            return response.Success ? Ok(response) : NotFound(response);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin")]
+        public async Task<IActionResult> GetAllForAdmin(int page = 1, int pageSize = 10)
+        {
+            var response = await categoryService.GetAllAsync(
+                page,
+                pageSize,
+                includeInactive: true
+            );
+
+            return response.Success ? Ok(response) : NotFound(response);
+        }
+
 
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -48,10 +62,18 @@ namespace Web_E_Commerce.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPut("{id}/deactivate")]
+        public async Task<IActionResult> Deactivate(int id)
         {
-            var response = await categoryService.DeleteAsync(id);
+            var response = await categoryService.DeactivateAsync(id);
+            return response.Success ? Ok(response) : NotFound(response);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/activate")]
+        public async Task<IActionResult> Activate(int id)
+        {
+            var response = await categoryService.ActivateAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
         }
     }
