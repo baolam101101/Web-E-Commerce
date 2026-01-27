@@ -9,7 +9,9 @@ namespace Web_E_Commerce.Repositories.Implementations
     {
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products
+                .Include(p => p.Category)
+                .ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(int id)

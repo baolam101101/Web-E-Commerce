@@ -35,7 +35,6 @@ namespace Web_E_Commerce.Controllers
             return response.Success ? Ok(response) : NotFound(response);
         }
 
-
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
