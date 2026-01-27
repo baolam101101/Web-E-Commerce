@@ -1,4 +1,6 @@
-﻿namespace Web_E_Commerce.DTOs.Shared.Constants
+﻿using System.Data.Common;
+
+namespace Web_E_Commerce.DTOs.Shared.Constants
 {
     public static class MessageDescriptions
     {
@@ -69,5 +71,12 @@
         // ===== Server =====
         public const string INTERNAL_SERVER_ERROR =
             "An unexpected error occurred on the server.";
+
+        // ===== Seller Request Specific =====
+        public const string INVALID_SELLER_REQUEST = "The seller request is invalid.";
+        public const string SELLER_REQUEST_APPROVED = "The seller request has been approved successfully.";
+        public const string SELLER_REQUEST_REJECTED = "The seller request has been rejected successfully.";
+        public const string GET_PENDING_SELLER_REQUESTS_SUCCESS = "Pending seller requests retrieved successfully.";
+        public const string GET_ALL_SELLER_REQUESTS_SUCCESS = "All seller requests retrieved successfully.";
     }
 }

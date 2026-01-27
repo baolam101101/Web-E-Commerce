@@ -26,7 +26,7 @@ namespace Web_E_Commerce.Controllers
             return response.Success ? Ok(response) : NotFound(response);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Seller")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCreateRequest request)
         {
@@ -34,7 +34,7 @@ namespace Web_E_Commerce.Controllers
             return CreatedAtAction(nameof(GetById), new { id = response.Data?.Id }, response);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Seller")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ProductUpdateRequest request)
         {
@@ -42,7 +42,7 @@ namespace Web_E_Commerce.Controllers
             return response.Success ? Ok(response) : NotFound(response);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Seller")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

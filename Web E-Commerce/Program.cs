@@ -49,6 +49,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add DI
 builder.Services.AddScoped<IProductRepositories, ProductRepositories>();
 builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
+builder.Services.AddScoped<ISellerRequestRepositories, SellerRequestRepositories>();
+builder.Services.AddScoped<IRoleRepositories, RoleRepositories>();
 
 // Add Service
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -56,6 +58,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ISellerRequestService, SellerRequestService>();
 
 // Add HttpContextAccessor
 builder.Services.AddHttpContextAccessor();

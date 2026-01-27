@@ -70,6 +70,13 @@ namespace Web_E_Commerce.Data
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId);
 
+            // ============================
+            // SellerRequest configuration
+            // ============================
+            modelBuilder.Entity<SellerRequest>()
+                .Property(sr => sr.Status)
+                .HasConversion<string>();
+
             // Seller Request → User
             modelBuilder.Entity<SellerRequest>()
                 .HasOne(ur => ur.User)
@@ -81,9 +88,7 @@ namespace Web_E_Commerce.Data
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Customer" },
                 new Role { Id = 2, Name = "Seller" },
-                new Role { Id = 3, Name = "Admin" },
-                new Role { Id = 4, Name = "Moderator" },
-                new Role { Id = 5, Name = "Manager" }
+                new Role { Id = 3, Name = "Admin" }
             );
 
             // Seed Users
@@ -97,27 +102,20 @@ namespace Web_E_Commerce.Data
                 new User
                 {
                     Id = 2,
-                    UserName = "moderator",
+                    UserName = "seller",
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("mod123")
-                },
-                new User
-                {
-                    Id = 3,
-                    UserName = "manager",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("manager123")
                 }
             );
 
             // Seed UserRoles
             modelBuilder.Entity<UserRole>().HasData(
                 new UserRole { UserId = 1, RoleId = 3 }, // Admin
-                new UserRole { UserId = 2, RoleId = 4 },  // Moderator
-                new UserRole { UserId = 3, RoleId = 5 }  // Manager
+                new UserRole { UserId = 2, RoleId = 2 }  // Seller
             );
         }
 
         public override async Task<int> SaveChangesAsync(
-    CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {

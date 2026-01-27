@@ -64,5 +64,12 @@
 
         // ===== Server =====
         public const string INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
+
+        // ===== Seller Request Management =====
+        public const string INVALID_SELLER_REQUEST = "INVALID_SELLER_REQUEST";
+        public const string SELLER_REQUEST_APPROVED = "SELLER_REQUEST_APPROVED";
+        public const string SELLER_REQUEST_REJECTED = "SELLER_REQUEST_REJECTED";
+        public const string GET_PENDING_SELLER_REQUESTS_SUCCESS = "GET_PENDING_SELLER_REQUESTS_SUCCESS";
+        public const string GET_ALL_SELLER_REQUESTS_SUCCESS = "GET_ALL_SELLER_REQUESTS_SUCCESS";
     }
 }

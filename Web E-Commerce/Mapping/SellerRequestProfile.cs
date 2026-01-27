@@ -2,6 +2,7 @@
 using Web_E_Commerce.DTOs.Admin.SellerRequest.Responses;
 using Web_E_Commerce.DTOs.Seller.Requests;
 using Web_E_Commerce.Models;
+using Web_E_Commerce.Enums;
 
 namespace Web_E_Commerce.Mapping
 {
@@ -13,7 +14,7 @@ namespace Web_E_Commerce.Mapping
             CreateMap<SellerRequestDto, SellerRequest>()
                 .BeforeMap((src, dest) =>
                 {
-                    dest.Status = "Pending";
+                    dest.Status = SellerRequestStatus.Pending;
                     dest.RequestAt = DateTime.UtcNow;
                 });
 
