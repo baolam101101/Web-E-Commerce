@@ -28,5 +28,10 @@ namespace Web_E_Commerce.Repositories.Implementations
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
         }
+        public async Task<bool> ExistsAsync(string normalizedName)
+        {
+            return await _context.Categories
+                .AnyAsync(c => c.NormalizedName == normalizedName);
+        }
     }
 }

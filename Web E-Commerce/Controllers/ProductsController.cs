@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web_E_Commerce.DTOs.Client.Product.Requests;
+using Web_E_Commerce.DTOs.Client.Product.Responses;
+using Web_E_Commerce.DTOs.Shared;
+using Web_E_Commerce.DTOs.Shared.Constants;
+using Web_E_Commerce.Services.Implementations;
 using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Controllers
@@ -12,19 +16,41 @@ namespace Web_E_Commerce.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<ApiResponse<PagedResult<ProductResponse>>> GetProducts(
+            [FromQuery] ProductFilterDto filter)
         {
-            var response = await productService.GetAllAsync(page, pageSize);
-            return Ok(response);
+            return await productService.GetProductsAsync(filter);
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")]
+        [HttpGet("{slug}/related")]
+        public async Task<ApiResponse<List<ProductResponse>>> GetRelatedProducts(string slug)
+        {
+            return await productService.GetRelatedProductsAsync(slug);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var response = await productService.GetByIdAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
         }
+
+        [AllowAnonymous]
+        [HttpGet("{slug}")]
+        public async Task<ApiResponse<ProductResponse>> GetBySlug(string slug)
+        {
+            return await productService.GetBySlugAsync(slug);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{slug}/view")]
+        public async Task<ApiResponse<int>> IncreaseView(string slug)
+        {
+            return await productService.IncrementViewAsync(slug);
+        }
+
 
         [Authorize(Roles = "Admin, Seller")]
         [HttpPost]
@@ -49,13 +75,5 @@ namespace Web_E_Commerce.Controllers
             var response = await productService.DeleteAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
         }
-
-        //[AllowAnonymous]
-        //[HttpGet("filter")]
-        //public async Task<IActionResult> Filter([FromQuery] ProductFilterDto filterDto)
-        //{
-        //    var response = await productService.FilterAsync(filterDto);
-        //    return Ok(response);
-        //}
     }
 }

@@ -20,6 +20,7 @@ namespace Web_E_Commerce.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<ProductReview> ProductReviews { get; set; }
         public DbSet<SellerRequest> SellerRequests { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

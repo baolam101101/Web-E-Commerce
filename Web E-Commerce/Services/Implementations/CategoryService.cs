@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Web_E_Commerce.DTOs.Category.Requests;
 using Web_E_Commerce.DTOs.Category.Responses;
 using Web_E_Commerce.DTOs.Shared;
@@ -8,6 +9,7 @@ using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Implementations;
 using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Services.Interfaces;
+using Web_E_Commerce.Utilities;
 
 namespace Web_E_Commerce.Services.Implementations
 {
@@ -68,7 +70,28 @@ namespace Web_E_Commerce.Services.Implementations
         // =========================================
         public async Task<ApiResponse<CategoryResponse>> CreateAsync(CategoryCreateRequest dto)
         {
+            // category Name
+            var name = dto.Name.Trim();
+            // normalize name
+            var normalizedName = name.ToLower();
+
+            // check duplicate
+            var exists = await categoryRepositories.ExistsAsync(normalizedName);
+
+            if (exists)
+                throw new BadRequestException(
+                    MessageKeys.CATEGORY_ALREADY_EXISTS,
+                    MessageDescriptions.CATEGORY_ALREADY_EXISTS
+                );
+
+            var slug = SlugHelper.Generate(name);
+
             var category = mapper.Map<Category>(dto);
+
+            category.Name = name;
+            category.NormalizedName = normalizedName;
+            category.Slug = slug;
+
             var created = await categoryRepositories.CreateAsync(category);
             var response = mapper.Map<CategoryResponse>(created);
 

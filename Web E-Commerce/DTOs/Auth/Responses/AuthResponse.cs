@@ -2,13 +2,7 @@
 {
     public class AuthResponse
     {
-        public string Message { get; set; } = string.Empty;
-        public AuthData Data { get; set; } = new AuthData();
-    }
-
-    public class AuthData
-    {
-        public string AccessToken { get; set; } = string.Empty;
-
+        public string AccessToken { get; set; } = default!;
+        public string RefreshToken { get; set; } = default!;
     }
 }

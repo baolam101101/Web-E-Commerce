@@ -1,24 +1,25 @@
-﻿using Web_E_Commerce.Models;
+﻿using Web_E_Commerce.DTOs.Client.Product.Requests;
+using Web_E_Commerce.DTOs.Shared;
+using Web_E_Commerce.Models;
 
 namespace Web_E_Commerce.Repositories.Interfaces
 {
     public interface IProductRepositories
     {
         // CRUD operations
-        Task<IEnumerable<Product>> GetAllAsync();
+        IQueryable<Product> GetQueryable();
         Task<Product?> GetByIdAsync(int id);
         Task<Product> CreateAsync(Product product);
         Task UpdateAsync(Product product);
         Task<bool> DeleteAsync(Product product);
-
-        // Filter
-        Task<(IEnumerable<Product> Items, int TotalCount)> FilterAsync(
-            int? categoryId,
-            string? keyword,
-            decimal? minPrice,
-            decimal? maxPrice,
-            string? sortBy,
-            int page,
-            int pageSize);
+        Task<bool> ExistsAsync(string name, int categoryId);
+        Task<bool> SlugExistsAsync(string slug);
+        Task<Product?> GetBySlugAsync(string slug);
+        Task<PagedResult<Product>> GetProductsAsync(ProductFilterDto filter);
+        Task<List<Product>> GetRelatedProductsAsync(
+            int categoryId,
+            int excludeProductId
+        );
+        Task IncrementViewAsync(string slug);
     }
 }

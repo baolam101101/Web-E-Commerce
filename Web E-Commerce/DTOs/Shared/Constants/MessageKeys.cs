@@ -27,6 +27,10 @@
         public const string DELETE_PRODUCT_SUCCESS = "DELETE_PRODUCT_SUCCESS";
         public const string DELETE_PRODUCT_FAILURE = "DELETE_PRODUCT_FAILURE";
         public const string PRODUCT_NOT_FOUND = "PRODUCT_NOT_FOUND";
+        public const string PRODUCT_ALREADY_EXISTS = "PRODUCT_ALREADY_EXISTS";
+        public const string GET_SLUG_PRODUCT_SUCCESS = "GET_SLUG_PRODUCT_SUCCESS";
+        public const string GET_RELATED_PRODUCT_SUCCESS = "GET_RELATED_PRODUCT_SUCCESS";
+        public const string GET_PRODUCT_VIEW_SUCCESS = "GET_PRODUCT_VIEW_SUCCESS";
 
         // ==============================
         // Category Related Keys
@@ -41,6 +45,7 @@
         public const string CATEGORY_ALREADY_ACTIVE = "CATEGORY_ALREADY_ACTIVE";
         public const string DEACTIVATE_CATEGORY_SUCCESS = "DEACTIVATE_CATEGORY_SUCCESS";
         public const string ACTIVATE_CATEGORY_SUCCESS = "ACTIVATE_CATEGORY_SUCCESS";
+        public const string CATEGORY_ALREADY_EXISTS = "CATEGORY_ALREADY_EXISTS";
 
 
         // ==============================
@@ -71,5 +76,9 @@
         public const string SELLER_REQUEST_REJECTED = "SELLER_REQUEST_REJECTED";
         public const string GET_PENDING_SELLER_REQUESTS_SUCCESS = "GET_PENDING_SELLER_REQUESTS_SUCCESS";
         public const string GET_ALL_SELLER_REQUESTS_SUCCESS = "GET_ALL_SELLER_REQUESTS_SUCCESS";
+
+        // ===== Auth =====
+        public const string REGISTER_SUCCESS = "REGISTER_SUCCESS";
+        public const string LOGIN_SUCCESS = "LOGIN_SUCCESS";
     }
 }

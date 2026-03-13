@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Web_E_Commerce.DTOs.Client.Product.Requests;
 using Web_E_Commerce.DTOs.Client.Product.Responses;
 using Web_E_Commerce.DTOs.Shared;
 using Web_E_Commerce.DTOs.Shared.Constants;
+using Web_E_Commerce.Enums;
 using Web_E_Commerce.Exceptions;
 using Web_E_Commerce.Models;
 using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Services.Interfaces;
+using Web_E_Commerce.Utilities;
 
 namespace Web_E_Commerce.Services.Implementations
 {
@@ -15,35 +18,50 @@ namespace Web_E_Commerce.Services.Implementations
         ICategoryRepositories categoryRepositories,
         IMapper mapper) : IProductService
     {
-        public async Task<ApiResponse<PaginationWrapper<ProductResponse>>> GetAllAsync(int page, int pageSize)
+        public async Task<ApiResponse<PagedResult<ProductResponse>>> GetProductsAsync(ProductFilterDto filter)
         {
-            if (page <= 0 || pageSize <= 0)
-                throw new BadRequestException(MessageKeys.INVALID_PAGINATION_PARAMETERS, MessageDescriptions.INVALID_PAGINATION_PARAMETERS);
+            if (filter.Page <= 0 || filter.PageSize <= 0)
+                throw new BadRequestException(
+                    MessageKeys.INVALID_PAGINATION_PARAMETERS,
+                    MessageDescriptions.INVALID_PAGINATION_PARAMETERS
+                );
 
-            var query = productRepositories.GetAllAsync();
+            var result = await productRepositories.GetProductsAsync(filter);
 
-            var queryable = await query;
+            var mapped = mapper.Map<List<ProductResponse>>(result.Items);
 
-            var totalItems = queryable.Count();
-
-            var items = queryable
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            var mapped = mapper.Map<IEnumerable<ProductResponse>>(items);
-
-            var pagination = new PaginationWrapper<ProductResponse>(
-                page,
-                pageSize,
-                totalItems,
-                mapped
+            var paged = new PagedResult<ProductResponse>(
+                mapped,
+                result.TotalCount,
+                filter.Page,
+                filter.PageSize
             );
 
-            return ApiResponse<PaginationWrapper<ProductResponse>>.Ok(
-                pagination,
+            return ApiResponse<PagedResult<ProductResponse>>.Ok(
+                paged,
                 MessageKeys.GET_ALL_PRODUCTS_SUCCESS,
                 MessageDescriptions.GET_ALL_PRODUCTS_SUCCESS
+            );
+        }
+        public async Task<ApiResponse<List<ProductResponse>>> GetRelatedProductsAsync(string slug)
+        {
+            var product = await productRepositories.GetBySlugAsync(slug)
+                ?? throw new NotFoundException(
+                    MessageKeys.PRODUCT_NOT_FOUND,
+                    MessageDescriptions.PRODUCT_NOT_FOUND
+                );
+
+            var related = await productRepositories.GetRelatedProductsAsync(
+                product.CategoryId,
+                product.Id
+            );
+
+            var response = mapper.Map<List<ProductResponse>>(related);
+
+            return ApiResponse<List<ProductResponse>>.Ok(
+                response,
+                MessageKeys.GET_RELATED_PRODUCT_SUCCESS,
+                MessageDescriptions.GET_RELATED_PRODUCT_SUCCESS
             );
         }
 
@@ -61,13 +79,66 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
+        public async Task<ApiResponse<ProductResponse>> GetBySlugAsync(string slug)
+        {
+            var product = await productRepositories.GetBySlugAsync(slug)
+                ?? throw new NotFoundException(
+                    MessageKeys.PRODUCT_NOT_FOUND,
+                    MessageDescriptions.PRODUCT_NOT_FOUND
+                );
+
+            product.ViewCount += 1;
+            await productRepositories.UpdateAsync(product);
+
+            var mapped = mapper.Map<ProductResponse>(product);
+
+            return ApiResponse<ProductResponse>.Ok(
+                mapped,
+                MessageKeys.GET_SLUG_PRODUCT_SUCCESS,
+                MessageDescriptions.GET_SLUG_PRODUCT_SUCCESS
+            );
+        }
+
         public async Task<ApiResponse<ProductResponse>> CreateAsync(ProductCreateRequest request)
         {
             // check category exists
             var category = await categoryRepositories.GetByIdAsync(request.CategoryId)
-                ?? throw new NotFoundException(MessageKeys.CATEGORY_NOT_FOUND, MessageDescriptions.CATEGORY_NOT_FOUND);
+                ?? throw new NotFoundException(
+                    MessageKeys.CATEGORY_NOT_FOUND, 
+                    MessageDescriptions.CATEGORY_NOT_FOUND
+                );
+
+            // product name
+            var name = request.Name.Trim();
+
+            // normalize product name
+            var normalizedName = name.ToLower();
+
+            // check exists product name in same category
+            var exists = await productRepositories.ExistsAsync(
+                normalizedName,
+                request.CategoryId
+            );
+
+            if (exists)
+                throw new BadRequestException(
+                    MessageKeys.PRODUCT_ALREADY_EXISTS,
+                    MessageDescriptions.PRODUCT_ALREADY_EXISTS
+                );
+
+            var slug = SlugHelper.Generate(name);
+
+            var slugExists = await productRepositories.SlugExistsAsync(slug);
+
+            if(slugExists)
+                slug = $"{slug}-{Guid.NewGuid().ToString()[..6]}";
 
             var product = mapper.Map<Product>(request);
+
+            product.Name = name;
+            product.NormalizedName = normalizedName;
+            product.Slug = slug;
+
             var created = await productRepositories.CreateAsync(product);
             var response = mapper.Map<ProductResponse>(created);
 
@@ -125,34 +196,20 @@ namespace Web_E_Commerce.Services.Implementations
                 MessageDescriptions.DELETE_PRODUCT_SUCCESS
             );
         }
+        public async Task<ApiResponse<int>> IncrementViewAsync(string slug)
+        {
+            var product = await productRepositories.GetBySlugAsync(slug)
+                ?? throw new NotFoundException(
+                    MessageKeys.PRODUCT_NOT_FOUND,
+                    MessageDescriptions.PRODUCT_NOT_FOUND
+                );
 
-        //public async Task<ApiResponse<PaginationWrapper<ProductResponse>>> FilterAsync(ProductFilterDto filterDto)
-        //{
-        //    var (items, totalCount) = await productRepositories.FilterAsync(
-        //        filterDto.CategoryId,
-        //        filterDto.Keyword,
-        //        filterDto.MinPrice,
-        //        filterDto.MaxPrice,
-        //        filterDto.SortBy,
-        //        filterDto.Page,
-        //        filterDto.PageSize
-        //    );
-
-        //    // Map từ Product -> ProductResponse
-        //    var mappedItems = mapper.Map<IEnumerable<ProductResponse>>(items);
-
-        //    var response = new PaginationWrapper<ProductResponse>(
-        //        filterDto.Page,
-        //        filterDto.PageSize,
-        //        totalCount,
-        //        mappedItems
-        //    );
-
-        //    return new ApiResponse<PaginationWrapper<ProductResponse>>(
-        //        "Filtered products successfully",
-        //        response
-        //    );
-        //}
+            return ApiResponse<int>.Ok(
+                product.ViewCount,
+                MessageKeys.GET_PRODUCT_VIEW_SUCCESS,
+                MessageDescriptions.GET_PRODUCT_VIEW_SUCCESS
+            );
+        }
 
     }
 }

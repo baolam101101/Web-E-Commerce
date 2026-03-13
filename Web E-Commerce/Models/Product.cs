@@ -1,10 +1,16 @@
-﻿namespace Web_E_Commerce.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Web_E_Commerce.Models
 {
+    [Index(nameof(NormalizedName), nameof(CategoryId), IsUnique = true)]
     public class Product : BaseEntity
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string NormalizedName { get; set; } = default!;
+        public string Slug { get; set; } = default!;
         public decimal Price { get; set; }
+        public int ViewCount { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
