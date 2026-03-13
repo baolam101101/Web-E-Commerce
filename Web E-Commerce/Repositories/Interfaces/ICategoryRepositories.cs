@@ -9,5 +9,6 @@ namespace Web_E_Commerce.Repositories.Interfaces
         Task<Category?> GetByIdAsync(int id);
         Task<Category> CreateAsync(Category category);
         Task UpdateAsync(Category category);
+        Task<bool> ExistsAsync(string normalizedName);
     }
 }

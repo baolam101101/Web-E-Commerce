@@ -10,8 +10,10 @@ namespace Web_E_Commerce.Mapping
         public ProductProfile()
         {
             CreateMap<Product, ProductResponse>()
-                .ForMember(dest => dest.CategoryName, opt =>
-                    opt.MapFrom(src => src.Category != null ? src.Category.Name : null));
+                .ForMember(
+                    dest => dest.CategoryName, 
+                    opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : null)
+                );
             CreateMap<ProductCreateRequest, Product>();
             CreateMap<ProductUpdateRequest, Product>();
 

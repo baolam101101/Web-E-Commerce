@@ -29,6 +29,10 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
         public const string UPDATE_PRODUCT_SUCCESS = "Product has been updated successfully.";
         public const string DELETE_PRODUCT_SUCCESS = "Product has been deleted successfully.";
         public const string DELETE_PRODUCT_FAILURE = "Failed to delete the product.";
+        public const string PRODUCT_ALREADY_EXISTS = "A product with the same name already exists in this category.";
+        public const string GET_SLUG_PRODUCT_SUCCESS = "Get product by slug successfully.";
+        public const string GET_RELATED_PRODUCT_SUCCESS = "Get related products successfully.";
+        public const string GET_PRODUCT_VIEW_SUCCESS = "Get product views successfully.";
 
         // ==============================
         // Category Related Messages
@@ -42,6 +46,7 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
         public const string CATEGORY_ALREADY_ACTIVE = "The category is already active.";
         public const string DEACTIVATE_CATEGORY_SUCCESS = "Category has been deactivated successfully.";
         public const string ACTIVATE_CATEGORY_SUCCESS = "Category has been activated successfully.";
+        public const string CATEGORY_ALREADY_EXISTS = "A category with the same name already exists.";
 
         // ==============================
         // Seller Request Related Messages
@@ -78,5 +83,9 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
         public const string SELLER_REQUEST_REJECTED = "The seller request has been rejected successfully.";
         public const string GET_PENDING_SELLER_REQUESTS_SUCCESS = "Pending seller requests retrieved successfully.";
         public const string GET_ALL_SELLER_REQUESTS_SUCCESS = "All seller requests retrieved successfully.";
+
+        // ===== Auth =====
+        public const string USER_REGISTRATION_SUCCESS = "User registration successful.";
+        public const string USER_LOGIN_SUCCESS = "User login successful.";
     }
 }

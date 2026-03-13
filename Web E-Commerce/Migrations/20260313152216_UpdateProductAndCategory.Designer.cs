@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web_E_Commerce.Data;
 
@@ -11,9 +12,11 @@ using Web_E_Commerce.Data;
 namespace Web_E_Commerce.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260313152216_UpdateProductAndCategory")]
+    partial class UpdateProductAndCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,16 +149,12 @@ namespace Web_E_Commerce.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Slug")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Categories");
@@ -300,9 +299,6 @@ namespace Web_E_Commerce.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ViewCount")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -400,19 +396,19 @@ namespace Web_E_Commerce.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 3, 13, 19, 41, 55, 837, DateTimeKind.Utc).AddTicks(1994),
+                            CreatedAt = new DateTime(2026, 3, 13, 15, 22, 14, 974, DateTimeKind.Utc).AddTicks(6131),
                             Name = "Customer"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2026, 3, 13, 19, 41, 55, 837, DateTimeKind.Utc).AddTicks(1998),
+                            CreatedAt = new DateTime(2026, 3, 13, 15, 22, 14, 974, DateTimeKind.Utc).AddTicks(6133),
                             Name = "Seller"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2026, 3, 13, 19, 41, 55, 837, DateTimeKind.Utc).AddTicks(1999),
+                            CreatedAt = new DateTime(2026, 3, 13, 15, 22, 14, 974, DateTimeKind.Utc).AddTicks(6134),
                             Name = "Admin"
                         });
                 });
@@ -500,20 +496,20 @@ namespace Web_E_Commerce.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 3, 13, 19, 41, 55, 837, DateTimeKind.Utc).AddTicks(2083),
+                            CreatedAt = new DateTime(2026, 3, 13, 15, 22, 14, 974, DateTimeKind.Utc).AddTicks(6243),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$glca/yco.n7EENrPHOzkxe98I7FCkohy50uVQ9z/pbjbDkAvhvkNu",
+                            PasswordHash = "$2a$11$Xh.9U9bTpBRdBqCW09KF0uiI5UTh4fabh859ISfOKvqg9y8/AnHqC",
                             PhoneNumber = "",
                             UserName = "admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2026, 3, 13, 19, 41, 55, 938, DateTimeKind.Utc).AddTicks(3905),
+                            CreatedAt = new DateTime(2026, 3, 13, 15, 22, 15, 74, DateTimeKind.Utc).AddTicks(4882),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$776zPKKGU7kaxeIZERkikezSzZWt0FxD8oTVxKnojc/6xiMll3leS",
+                            PasswordHash = "$2a$11$LktGzSGgPbE6X.AUPeCeGeOTN3MdfxGkkmfmELii2btCGQXWYGaZ6",
                             PhoneNumber = "",
                             UserName = "seller"
                         });

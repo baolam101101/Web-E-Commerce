@@ -10,7 +10,15 @@ namespace Web_E_Commerce.Mapping
         public CategoryProfile()
         {
             CreateMap<Category, CategoryResponse>();
-            CreateMap<CategoryCreateRequest, Category>();
+            CreateMap<CategoryCreateRequest, Category>()
+                .ForMember(
+                    dest => dest.NormalizedName,
+                    opt => opt.MapFrom(src => src.Name.Trim().ToLower())
+                    )
+                .ForMember(
+                    dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name.Trim())
+                    );
             CreateMap<CategoryUpdateRequest, Category>();
         }
     }
