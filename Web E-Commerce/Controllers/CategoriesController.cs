@@ -37,7 +37,7 @@ namespace Web_E_Commerce.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var response = await categoryService.GetByIdAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
@@ -54,7 +54,7 @@ namespace Web_E_Commerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, CategoryUpdateRequest dto)
+        public async Task<IActionResult> Update(Guid id, CategoryUpdateRequest dto)
         {
             var response = await categoryService.UpdateAsync(id, dto);
             return response.Success ? Ok(response) : NotFound(response);
@@ -62,7 +62,7 @@ namespace Web_E_Commerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}/deactivate")]
-        public async Task<IActionResult> Deactivate(int id)
+        public async Task<IActionResult> Deactivate(Guid id)
         {
             var response = await categoryService.DeactivateAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
@@ -70,7 +70,7 @@ namespace Web_E_Commerce.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}/activate")]
-        public async Task<IActionResult> Activate(int id)
+        public async Task<IActionResult> Activate(Guid id)
         {
             var response = await categoryService.ActivateAsync(id);
             return response.Success ? Ok(response) : NotFound(response);

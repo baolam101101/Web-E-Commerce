@@ -51,7 +51,7 @@ namespace Web_E_Commerce.Services.Implementations
         // =========================================
         // GET CATEGORY BY ID
         // =========================================
-        public async Task<ApiResponse<CategoryResponse>> GetByIdAsync(int id)
+        public async Task<ApiResponse<CategoryResponse>> GetByIdAsync(Guid id)
         {
             var category = await categoryRepositories.GetByIdAsync(id)
                 ?? throw new NotFoundException(MessageKeys.CATEGORY_NOT_FOUND, MessageDescriptions.CATEGORY_NOT_FOUND);
@@ -105,7 +105,7 @@ namespace Web_E_Commerce.Services.Implementations
         // =========================================
         // UPDATE CATEGORY
         // =========================================
-        public async Task<ApiResponse<CategoryResponse>> UpdateAsync(int id, CategoryUpdateRequest dto)
+        public async Task<ApiResponse<CategoryResponse>> UpdateAsync(Guid id, CategoryUpdateRequest dto)
         {
             var category = await categoryRepositories.GetByIdAsync(id);
             if (category == null)
@@ -131,7 +131,7 @@ namespace Web_E_Commerce.Services.Implementations
         // =========================================
         // DEACTIVE CATEGORY
         // =========================================
-        public async Task<ApiResponse<bool>> DeactivateAsync(int id)
+        public async Task<ApiResponse<bool>> DeactivateAsync(Guid id)
         {
             var category = await categoryRepositories.GetByIdAsync(id);
 
@@ -165,7 +165,7 @@ namespace Web_E_Commerce.Services.Implementations
         // =========================================
         // ACTIVE CATEGORY
         // =========================================
-        public async Task<ApiResponse<bool>> ActivateAsync(int id)
+        public async Task<ApiResponse<bool>> ActivateAsync(Guid id)
         {
             var category = await categoryRepositories.GetByIdAsync(id);
 

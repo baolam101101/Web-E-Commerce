@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Web_E_Commerce.Data;
 using Web_E_Commerce.DTOs.Admin.UserRoles.Requests;
-using Web_E_Commerce.DTOs.Admin.UserRoles.Responses;
-using Web_E_Commerce.DTOs.Shared;
 using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Controllers.Admin
@@ -36,7 +32,7 @@ namespace Web_E_Commerce.Controllers.Admin
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserRoles(int userId)
+        public async Task<IActionResult> GetUserRoles(Guid userId)
         {
             var result = await userRoleService.GetUserRolesAsync(userId);
             return Ok(result);

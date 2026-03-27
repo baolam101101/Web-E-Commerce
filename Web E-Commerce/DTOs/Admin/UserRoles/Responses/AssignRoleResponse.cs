@@ -2,7 +2,7 @@
 {
     public class AssignRoleResponse
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public List<string> Roles { get; set; } = [];
     }
 }

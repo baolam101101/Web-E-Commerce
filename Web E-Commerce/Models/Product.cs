@@ -11,7 +11,7 @@ namespace Web_E_Commerce.Models
         public string Slug { get; set; } = default!;
         public decimal Price { get; set; }
         public int ViewCount { get; set; }
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public Category? Category { get; set; }
 
         // Audit fields

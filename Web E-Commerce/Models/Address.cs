@@ -1,9 +1,8 @@
 ﻿namespace Web_E_Commerce.Models
 {
-    public class Address
+    public class Address : BaseEntity
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public User? User { get; set; }
 
         public string RecipientName { get; set; } = string.Empty;

@@ -18,7 +18,7 @@ namespace Web_E_Commerce.Repositories.Implementations
             return Task.FromResult(query);
         }
 
-        public async Task<bool> ExistsPendingByUserAsync(int userId)
+        public async Task<bool> ExistsPendingByUserAsync(Guid userId)
         {
             return await context.SellerRequests
                 .AnyAsync(r =>
@@ -31,7 +31,7 @@ namespace Web_E_Commerce.Repositories.Implementations
             await context.SellerRequests.AddAsync(request);
         }
 
-        public async Task<SellerRequest?> GetByIdWithUserAsync(int requestId)
+        public async Task<SellerRequest?> GetByIdWithUserAsync(Guid requestId)
         {
             return await context.SellerRequests
                 .Include(r => r.User)
@@ -40,7 +40,7 @@ namespace Web_E_Commerce.Repositories.Implementations
                 .FirstOrDefaultAsync(r => r.Id == requestId);
         }
 
-        public async Task<SellerRequest?> GetByIdAsync(int requestId)
+        public async Task<SellerRequest?> GetByIdAsync(Guid requestId)
         {
             return await context.SellerRequests
                 .FirstOrDefaultAsync(r => r.Id == requestId);

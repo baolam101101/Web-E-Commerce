@@ -1,14 +1,16 @@
-using Microsoft.EntityFrameworkCore;
-using Web_E_Commerce.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Web_E_Commerce.Repositories.Interfaces;
-using Web_E_Commerce.Repositories.Implementations;
-using Web_E_Commerce.Services.Interfaces;
-using Web_E_Commerce.Services.Implementations;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Web_E_Commerce.Data;
+using Web_E_Commerce.DTOs.Order.Validators;
+using Web_E_Commerce.Repositories.Implementations;
+using Web_E_Commerce.Repositories.Interfaces;
+using Web_E_Commerce.Services.Implementations;
+using Web_E_Commerce.Services.Interfaces;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +60,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
     });
 
+builder.Services.AddValidatorsFromAssemblyContaining<OrderCheckoutValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -66,7 +70,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(typeof(Program).Assembly);
+});
 
 // Add DI
 builder.Services.AddScoped<IProductRepositories, ProductRepositories>();

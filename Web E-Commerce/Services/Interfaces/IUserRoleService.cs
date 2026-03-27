@@ -9,7 +9,7 @@ namespace Web_E_Commerce.Services.Interfaces
         Task<ApiResponse<AssignRoleResponse>> AssignRoleAsync(AssignRoleRequest request);
         Task<ApiResponse<bool>> RemoveRoleAsync(RemoveRoleRequest request);
         Task<ApiResponse<List<UserWithRolesResponse>>> GetAllUserWithRolesAsync();
-        Task<ApiResponse<UserWithRolesResponse>> GetUserRolesAsync(int userId);
+        Task<ApiResponse<UserWithRolesResponse>> GetUserRolesAsync(Guid userId);
         Task<ApiResponse<List<RoleDto>>> GetAllRolesAsync();
     }
 }

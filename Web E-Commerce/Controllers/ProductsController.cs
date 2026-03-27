@@ -30,8 +30,8 @@ namespace Web_E_Commerce.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var response = await productService.GetByIdAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
@@ -51,7 +51,6 @@ namespace Web_E_Commerce.Controllers
             return await productService.IncrementViewAsync(slug);
         }
 
-
         [Authorize(Roles = "Admin, Seller")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCreateRequest request)
@@ -62,7 +61,7 @@ namespace Web_E_Commerce.Controllers
 
         [Authorize(Roles = "Admin, Seller")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ProductUpdateRequest request)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ProductUpdateRequest request)
         {
             var response = await productService.UpdateAsync(id, request);
             return response.Success ? Ok(response) : NotFound(response);
@@ -70,7 +69,7 @@ namespace Web_E_Commerce.Controllers
 
         [Authorize(Roles = "Admin, Seller")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var response = await productService.DeleteAsync(id);
             return response.Success ? Ok(response) : NotFound(response);

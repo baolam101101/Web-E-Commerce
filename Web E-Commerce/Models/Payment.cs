@@ -2,15 +2,12 @@
 
 namespace Web_E_Commerce.Models
 {
-    public class Payment
+    public class Payment : BaseEntity
     {
-        public int Id { get; set; }
-        public int OrderId { get; set; }
-        public Order? Order { get; set; }
-
-        public PaymentMethod PaymentMethod {  get; set; }
-        public DateTime PaidAt { get; set; }
+        public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
+        public PaymentMethod PaymentMethod {  get; set; }
         public PaymentStatus PaymentStatus { get; set; } 
+        public string? TransactionId { get; set; } // Nếu tích hợp VNPay hoặc cổng thanh toán khác
     }
 }
