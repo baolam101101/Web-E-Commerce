@@ -4,10 +4,9 @@ namespace Web_E_Commerce.Services.Interfaces
 {
     public interface ICurrentUserService
     {
-        int UserId { get; }
+        Guid UserId { get; }
         string UserName { get; }
-        string Role { get; }
+        IEnumerable<string> Roles { get; }
         bool IsAuthenticated { get; }
-        IEnumerable<Claim> Claims { get; }
     }
 }

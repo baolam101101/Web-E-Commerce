@@ -81,7 +81,7 @@ namespace Web_E_Commerce.Services.Implementations
             return ApiResponse<List<UserWithRolesResponse>>.Ok(result, MessageKeys.GET_ALL_USERS_WITH_ROLES_SUCCESS, MessageDescriptions.GET_ALL_USERS_WITH_ROLES_SUCCESS);
         }
 
-        public async Task<ApiResponse<UserWithRolesResponse>> GetUserRolesAsync(int userId)
+        public async Task<ApiResponse<UserWithRolesResponse>> GetUserRolesAsync(Guid userId)
         {
             var user = await context.Users
                 .Include(u => u.UserRoles)

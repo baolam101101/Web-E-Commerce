@@ -4,7 +4,7 @@ namespace Web_E_Commerce.DTOs.Client.Product.Responses
 {
     public class ProductResponse
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string NormalizedName { get; set; } = default!;
         public string Slug { get; set; } = default!;

@@ -5,15 +5,20 @@ namespace Web_E_Commerce.Services.Implementations
 {
     public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
     {
-        public int UserId => 
-            int.TryParse(httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId) ? userId : 0;
+        public Guid UserId => 
+            Guid.TryParse(httpContextAccessor.HttpContext?.User
+                .FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId) 
+            ? userId 
+            : Guid.Empty;
         public string UserName => 
-            httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value ?? string.Empty;
-        public string Role =>
-            httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty;
+            httpContextAccessor.HttpContext?.User
+                .FindFirst(ClaimTypes.Name)?.Value ?? string.Empty;
+        public IEnumerable<string> Roles =>
+            httpContextAccessor.HttpContext?.User
+                .FindAll(ClaimTypes.Role)
+                .Select(r => r.Value)
+            ?? Enumerable.Empty<string>();
         public bool IsAuthenticated => 
             httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
-        public IEnumerable<Claim> Claims => 
-            httpContextAccessor.HttpContext?.User.Claims ?? [];
     }
 }

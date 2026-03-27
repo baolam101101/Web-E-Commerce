@@ -2,9 +2,8 @@
 {
     public class Cart : BaseEntity
     {
-        public int UserId { get; set; }
-        public User? User { get; set; }
-
+        public Guid UserId { get; set; }
+        public decimal TotalPrice { get; set; }
         public ICollection<CartItem> CartItems { get; set; } = [];
     }
 }

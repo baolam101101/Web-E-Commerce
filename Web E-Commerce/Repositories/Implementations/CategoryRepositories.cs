@@ -14,7 +14,7 @@ namespace Web_E_Commerce.Repositories.Implementations
                 .Where(c => c.IsActive) 
                 .ToListAsync();
 
-        public async Task<Category?> GetByIdAsync(int id) => await _context.Categories.FindAsync(id);
+        public async Task<Category?> GetByIdAsync(Guid id) => await _context.Categories.FindAsync(id);
 
         public async Task<Category> CreateAsync(Category category)
         {

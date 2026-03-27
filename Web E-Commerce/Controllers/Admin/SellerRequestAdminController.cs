@@ -23,11 +23,11 @@ namespace Web_E_Commerce.Controllers.Admin
 
 
         [HttpPut("{id}/approve")]
-        public async Task<IActionResult> Approve(int id)
+        public async Task<IActionResult> Approve(Guid id)
         => Ok(await service.ApproveAsync(id));
 
         [HttpPut("{id}/reject")]
-        public async Task<IActionResult> Reject(int id)
+        public async Task<IActionResult> Reject(Guid id)
             => Ok(await service.RejectAsync(id));
     }
 }

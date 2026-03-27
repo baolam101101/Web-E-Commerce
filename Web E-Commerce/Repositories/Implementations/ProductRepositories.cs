@@ -18,8 +18,8 @@ namespace Web_E_Commerce.Repositories.Implementations
         }
 
         public async Task<List<Product>> GetRelatedProductsAsync(
-            int categoryId,
-            int excludeProductId)
+            Guid categoryId,
+            Guid excludeProductId)
         {
             return await _context.Products
                 .AsNoTracking()
@@ -31,7 +31,7 @@ namespace Web_E_Commerce.Repositories.Implementations
                 .ToListAsync();
         }
 
-        public async Task<Product?> GetByIdAsync(int id)
+        public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _context.Products
                 .Include(p => p.Category)
@@ -65,7 +65,7 @@ namespace Web_E_Commerce.Repositories.Implementations
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> ExistsAsync(string normalizedName, int categoryId)
+        public async Task<bool> ExistsAsync(string normalizedName, Guid categoryId)
         {
             return await _context.Products
                 .AnyAsync(p =>

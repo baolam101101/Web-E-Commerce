@@ -87,7 +87,7 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        public async Task<ApiResponse<bool>> ApproveAsync(int requestId)
+        public async Task<ApiResponse<bool>> ApproveAsync(Guid requestId)
         {
             var request = await sellerRequestRepositories.GetByIdWithUserAsync(requestId);
 
@@ -127,7 +127,7 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        public async Task<ApiResponse<bool>> RejectAsync(int requestId)
+        public async Task<ApiResponse<bool>> RejectAsync(Guid requestId)
         {
             var request = await sellerRequestRepositories.GetByIdAsync(requestId);
 

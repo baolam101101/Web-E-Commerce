@@ -15,6 +15,6 @@ namespace Web_E_Commerce.Models
         public bool IsActive { get; set; } = true;
 
         // Navigation
-        public ICollection<Product>? Products { get; set; } = new List<Product>();
+        public ICollection<Product>? Products { get; set; } = [];
     }
 }

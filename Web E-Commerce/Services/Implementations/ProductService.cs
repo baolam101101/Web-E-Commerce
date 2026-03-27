@@ -65,7 +65,7 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        public async Task<ApiResponse<ProductResponse>> GetByIdAsync(int id)
+        public async Task<ApiResponse<ProductResponse>> GetByIdAsync(Guid id)
         {
             var product = await productRepositories.GetByIdAsync(id)
                 ?? throw new NotFoundException(MessageKeys.PRODUCT_NOT_FOUND, MessageDescriptions.PRODUCT_NOT_FOUND);
@@ -149,7 +149,7 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        public async Task<ApiResponse<ProductResponse>> UpdateAsync(int id, ProductUpdateRequest request)
+        public async Task<ApiResponse<ProductResponse>> UpdateAsync(Guid id, ProductUpdateRequest request)
         {
             // check product exists
             var existing = await productRepositories.GetByIdAsync(id)
@@ -174,7 +174,7 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        public async Task<ApiResponse<bool>> DeleteAsync(int id)
+        public async Task<ApiResponse<bool>> DeleteAsync(Guid id)
         {
             var product = await productRepositories.GetByIdAsync(id)
                 ?? throw new NotFoundException(MessageKeys.PRODUCT_NOT_FOUND, MessageDescriptions.PRODUCT_NOT_FOUND);
@@ -196,6 +196,7 @@ namespace Web_E_Commerce.Services.Implementations
                 MessageDescriptions.DELETE_PRODUCT_SUCCESS
             );
         }
+
         public async Task<ApiResponse<int>> IncrementViewAsync(string slug)
         {
             var product = await productRepositories.GetBySlugAsync(slug)

@@ -2,7 +2,7 @@
 {
     public class ApproveSellerRequestDto
     {
-        public int RequestId { get; set; }
+        public Guid RequestId { get; set; }
         public bool Approve { get; set; }
     }
 }

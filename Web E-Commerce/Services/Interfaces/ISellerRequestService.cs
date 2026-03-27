@@ -14,8 +14,8 @@ namespace Web_E_Commerce.Services.Interfaces
             int page,
             int pageSize);
 
-        Task<ApiResponse<bool>> ApproveAsync(int requestId);
+        Task<ApiResponse<bool>> ApproveAsync(Guid requestId);
 
-        Task<ApiResponse<bool>> RejectAsync(int requestId);
+        Task<ApiResponse<bool>> RejectAsync(Guid requestId);
     }
 }
