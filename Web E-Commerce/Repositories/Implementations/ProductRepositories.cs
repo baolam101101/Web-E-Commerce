@@ -140,5 +140,12 @@ namespace Web_E_Commerce.Repositories.Implementations
 
             return new PagedResult<Product>(items, totalCount);
         }
+
+        public async Task<List<Product>> GetByIdsAsync(List<Guid> ids)
+        {
+            return await _context.Products
+                .Where(p => ids.Contains(p.Id))
+                .ToListAsync();
+        }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web_E_Commerce.Data;
 
@@ -11,9 +12,11 @@ using Web_E_Commerce.Data;
 namespace Web_E_Commerce.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260327191305_AddStockAndSold")]
+    partial class AddStockAndSold
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,9 +186,8 @@ namespace Web_E_Commerce.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PaidAt")
                         .HasColumnType("datetime2");
@@ -193,9 +195,8 @@ namespace Web_E_Commerce.Migrations
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -449,19 +450,19 @@ namespace Web_E_Commerce.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4171),
+                            CreatedAt = new DateTime(2026, 3, 27, 19, 13, 4, 839, DateTimeKind.Utc).AddTicks(7046),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4174),
+                            CreatedAt = new DateTime(2026, 3, 27, 19, 13, 4, 839, DateTimeKind.Utc).AddTicks(7049),
                             Name = "Seller"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4175),
+                            CreatedAt = new DateTime(2026, 3, 27, 19, 13, 4, 839, DateTimeKind.Utc).AddTicks(7050),
                             Name = "Customer"
                         });
                 });
@@ -550,20 +551,20 @@ namespace Web_E_Commerce.Migrations
                         new
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4274),
+                            CreatedAt = new DateTime(2026, 3, 27, 19, 13, 4, 839, DateTimeKind.Utc).AddTicks(7184),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$95J/JamV61REGaMRMOlQs.CTwnEIXKtnbS8.cj.TeV2IJYtoaaPiK",
+                            PasswordHash = "$2a$11$9BJ6R3jTB2UfBB6ofnu7dOWPAk/N6sRA99yNUpRkUsSwHH4f3SHjO",
                             PhoneNumber = "",
                             UserName = "admin"
                         },
                         new
                         {
                             Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 37, 35, DateTimeKind.Utc).AddTicks(3837),
+                            CreatedAt = new DateTime(2026, 3, 27, 19, 13, 4, 939, DateTimeKind.Utc).AddTicks(5155),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$JfOqGyhiodYc1apj.pbpV.rGt2gybUuwLHfOTlfs6goGxw0fZP6d6",
+                            PasswordHash = "$2a$11$afv.798mm7Uw4v1YWAzkL.M9LHpNQUYOIS.N9QnkldPFP0A4ZPUPm",
                             PhoneNumber = "",
                             UserName = "seller"
                         });

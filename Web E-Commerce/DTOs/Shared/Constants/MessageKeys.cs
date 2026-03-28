@@ -80,5 +80,25 @@
         // ===== Auth =====
         public const string REGISTER_SUCCESS = "REGISTER_SUCCESS";
         public const string LOGIN_SUCCESS = "LOGIN_SUCCESS";
+
+        // ===== Cart =====
+        public const string CART_NOT_FOUND = "CART_NOT_FOUND";
+        public const string GET_CART_SUCCESS = "GET_CART_SUCCESS";
+        public const string ADD_TO_CART_SUCCESS = "ADD_TO_CART_SUCCESS";
+        public const string UPDATE_CART_SUCCESS = "UPDATE_CART_SUCCESS";
+        public const string REMOVE_CART_ITEM_SUCCESS = "REMOVE_CART_ITEM_SUCCESS";
+        public const string CART_EMPTY = "CART_EMPTY";
+
+        // ===== Cart Item =====
+        public const string CART_ITEM_NOT_FOUND = "CART_ITEM_NOT_FOUND";
+
+        // ===== Stock =====
+        public const string NOT_ENOUGH_STOCK = "NOT_ENOUGH_STOCK";
+
+        // ===== Order =====
+        public const string ORDER_NOT_FOUND = "ORDER_NOT_FOUND";
+        public const string GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
+        public const string GET_ORDERS_SUCCESS = "GET_ORDERS_SUCCESS";
+        public const string CREATE_ORDER_SUCCESS = "CREATE_ORDER_SUCCESS";
     }
 }

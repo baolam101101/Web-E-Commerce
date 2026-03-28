@@ -17,8 +17,7 @@ namespace Web_E_Commerce.Services.Implementations
     ICurrentUserService currentUser,
     IMapper mapper,
     ISellerRequestRepositories sellerRequestRepositories,
-    IRoleRepositories roleRepositories
-) : ISellerRequestService
+    IRoleRepositories roleRepositories) : ISellerRequestService
     {
         public async Task<ApiResponse<PaginationWrapper<SellerRequestResponse>>> GetAllAsync(
             SellerRequestStatus? status,

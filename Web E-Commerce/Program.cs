@@ -1,5 +1,7 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +12,6 @@ using Web_E_Commerce.Repositories.Implementations;
 using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Services.Implementations;
 using Web_E_Commerce.Services.Interfaces;
-using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 builder.Services.AddValidatorsFromAssemblyContaining<OrderCheckoutValidator>();
@@ -80,6 +82,8 @@ builder.Services.AddScoped<IProductRepositories, ProductRepositories>();
 builder.Services.AddScoped<ICategoryRepositories, CategoryRepositories>();
 builder.Services.AddScoped<ISellerRequestRepositories, SellerRequestRepositories>();
 builder.Services.AddScoped<IRoleRepositories, RoleRepositories>();
+builder.Services.AddScoped<ICartRepositories, CartRepositories>();
+builder.Services.AddScoped<IOrderRepositories, OrderRepositories>();
 
 // Add Service
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -88,6 +92,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<ISellerRequestService, SellerRequestService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 // Add HttpContextAccessor
 builder.Services.AddHttpContextAccessor();

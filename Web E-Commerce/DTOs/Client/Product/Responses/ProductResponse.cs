@@ -9,6 +9,7 @@ namespace Web_E_Commerce.DTOs.Client.Product.Responses
         public string NormalizedName { get; set; } = default!;
         public string Slug { get; set; } = default!;
         public string Description { get; set; } = string.Empty;
+        public int Stock { get; set; }
 
         [Range(1, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
         public decimal Price { get; set; }

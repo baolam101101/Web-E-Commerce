@@ -87,5 +87,25 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
         // ===== Auth =====
         public const string USER_REGISTRATION_SUCCESS = "User registration successful.";
         public const string USER_LOGIN_SUCCESS = "User login successful.";
+
+        // ===== Cart =====
+        public const string CART_NOT_FOUND = "The specified cart does not exist.";
+        public const string GET_CART_SUCCESS = "Cart retrieved successfully.";
+        public const string ADD_TO_CART_SUCCESS = "Product added to cart successfully.";
+        public const string UPDATE_CART_SUCCESS = "Cart updated successfully.";
+        public const string REMOVE_CART_ITEM_SUCCESS = "Cart item removed successfully.";
+        public const string CART_EMPTY = "The cart is empty.";
+
+        // ===== Cart Item =====
+        public const string CART_ITEM_NOT_FOUND = "The specified cart item does not exist.";
+
+        // ===== Stock =====
+        public const string NOT_ENOUGH_STOCK = "Not enough stock available for the requested quantity.";
+
+        // ===== Order =====
+        public const string CREATE_ORDER_SUCCESS = "Order has been created successfully.";
+        public const string ORDER_NOT_FOUND = "The specified order does not exist.";
+        public const string GET_ORDER_SUCCESS = "Order retrieved successfully.";
+        public const string GET_ORDERS_SUCCESS = "Orders retrieved successfully.";
     }
 }

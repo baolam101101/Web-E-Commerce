@@ -8,5 +8,6 @@ namespace Web_E_Commerce.Services.Interfaces
     {
         Task<ApiResponse<OrderResponse>> Checkout(OrderCheckoutRequest request);
         Task<ApiResponse<List<OrderResponse>>> GetMyOrders();
+        Task<ApiResponse<OrderResponse>> GetByIdAsync(Guid id);
     }
 }
