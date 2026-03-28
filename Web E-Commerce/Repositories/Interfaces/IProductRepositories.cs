@@ -21,5 +21,6 @@ namespace Web_E_Commerce.Repositories.Interfaces
             Guid excludeProductId
         );
         Task IncrementViewAsync(string slug);
+        Task<List<Product>> GetByIdsAsync(List<Guid> ids);
     }
 }

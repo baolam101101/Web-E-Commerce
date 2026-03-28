@@ -49,29 +49,29 @@ namespace Web_E_Commerce.Data
 
             // Relationship CartItem - Cart
             modelBuilder.Entity<CartItem>()
-                .HasOne<Cart>()
+                .HasOne(ci => ci.Cart)
                 .WithMany(c => c.CartItems)
                 .HasForeignKey(ci => ci.CartId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Relationship CartItem - Product
             modelBuilder.Entity<CartItem>()
-                .HasOne<Product>()
+                .HasOne(ci => ci.Product)
                 .WithMany()
                 .HasForeignKey(ci => ci.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Relationship OrderItem - Product
             modelBuilder.Entity<OrderItem>()
-                .HasOne<Product>()
+                .HasOne(ci => ci.Product)
                 .WithMany()
                 .HasForeignKey(oi => oi.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Relationship OrderItem - Order
             modelBuilder.Entity<OrderItem>()
-                .HasOne<Order>()
-                .WithMany()
+                .HasOne(ci => ci.Order)
+                .WithMany(c => c.OrderItems)
                 .HasForeignKey(o => o.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -122,6 +122,14 @@ namespace Web_E_Commerce.Data
             modelBuilder.Entity<CartItem>()
                 .Property(ci => ci.PriceAtTime)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.OrderStatus)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.PaymentStatus)
+                .HasConversion<string>();
 
             // Configure many-to-many User <->Role
             modelBuilder.Entity<UserRole>()

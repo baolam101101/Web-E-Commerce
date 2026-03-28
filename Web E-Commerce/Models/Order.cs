@@ -12,5 +12,6 @@ namespace Web_E_Commerce.Models
         public string PhoneNumber { get; set; } = string.Empty;
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; } = [];
     }
 }

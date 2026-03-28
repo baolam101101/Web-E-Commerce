@@ -7,6 +7,6 @@
         public string ProductName { get; set; } = string.Empty;
         public decimal PriceAtTime { get; set; }
         public int Quantity { get; set; }
-        public decimal TotalPrice => PriceAtTime * Quantity;
+        public decimal TotalPrice { get; set; }
     }
 }
