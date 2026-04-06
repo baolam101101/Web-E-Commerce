@@ -20,7 +20,8 @@ namespace Web_E_Commerce.Repositories.Interfaces
             Guid categoryId,
             Guid excludeProductId
         );
-        Task IncrementViewAsync(string slug);
+        Task IncrementViewAsync(Guid id);
         Task<List<Product>> GetByIdsAsync(List<Guid> ids);
+        Task<bool> UpdateStockAsync(Guid productId, int quantity);
     }
 }

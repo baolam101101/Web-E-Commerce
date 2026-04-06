@@ -4,6 +4,7 @@
     {
         COD = 0,
         CreditCard = 1,
-        Paypal = 2,
+        VNPay = 2,
+        Momo = 3,
     }
 }

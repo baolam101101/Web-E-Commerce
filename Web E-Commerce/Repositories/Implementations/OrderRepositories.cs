@@ -11,7 +11,7 @@ namespace Web_E_Commerce.Repositories.Implementations
         public async Task<Order?> GetByIdAsync(Guid id)
         {
             return await _context.Orders
-                .AsNoTracking()
+                .AsTracking()
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync(o => o.Id == id);
@@ -39,11 +39,6 @@ namespace Web_E_Commerce.Repositories.Implementations
         public async Task AddAsync(Order order)
         {
             await _context.Orders.AddAsync(order);
-        }
-
-        public async Task AddRangeItemsAsync(List<OrderItem> items)
-        {
-            await _context.OrderItems.AddRangeAsync(items);
         }
 
         public async Task SaveChangesAsync()

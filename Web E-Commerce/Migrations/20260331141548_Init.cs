@@ -17,7 +17,7 @@ namespace Web_E_Commerce.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Slug = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -34,7 +34,7 @@ namespace Web_E_Commerce.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -48,7 +48,7 @@ namespace Web_E_Commerce.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -67,13 +67,15 @@ namespace Web_E_Commerce.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NormalizedName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     ViewCount = table.Column<int>(type: "int", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    Sold = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -95,7 +97,7 @@ namespace Web_E_Commerce.Migrations
                 name: "Addresses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RecipientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -122,7 +124,7 @@ namespace Web_E_Commerce.Migrations
                 name: "Carts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -143,15 +145,15 @@ namespace Web_E_Commerce.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PaidAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    OrderStatus = table.Column<int>(type: "int", nullable: false),
+                    OrderStatus = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentMethod = table.Column<int>(type: "int", nullable: false),
-                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -192,7 +194,7 @@ namespace Web_E_Commerce.Migrations
                 name: "SellerRequests",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShopName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -240,7 +242,7 @@ namespace Web_E_Commerce.Migrations
                 name: "ProductReviews",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
@@ -269,7 +271,7 @@ namespace Web_E_Commerce.Migrations
                 name: "CartItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -298,7 +300,7 @@ namespace Web_E_Commerce.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -328,7 +330,7 @@ namespace Web_E_Commerce.Migrations
                 name: "Payments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
@@ -353,9 +355,9 @@ namespace Web_E_Commerce.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 26, 18, 35, 22, 542, DateTimeKind.Utc).AddTicks(9928), "Admin", null },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 26, 18, 35, 22, 542, DateTimeKind.Utc).AddTicks(9930), "Seller", null },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 26, 18, 35, 22, 542, DateTimeKind.Utc).AddTicks(9930), "Customer", null }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2487), "Admin", null },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2491), "Seller", null },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2491), "Customer", null }
                 });
 
             migrationBuilder.InsertData(
@@ -363,8 +365,8 @@ namespace Web_E_Commerce.Migrations
                 columns: new[] { "Id", "Address", "CreatedAt", "Email", "FullName", "PasswordHash", "PhoneNumber", "UpdatedAt", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, new DateTime(2026, 3, 26, 18, 35, 22, 543, DateTimeKind.Utc).AddTicks(19), "", "", "$2a$11$G8D2r8qrC/N/o2KHPVH4a.8kQ2uy8A7z9N/mFMQvV3WwMUYiJe6hC", "", null, "admin" },
-                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), null, new DateTime(2026, 3, 26, 18, 35, 22, 642, DateTimeKind.Utc).AddTicks(7218), "", "", "$2a$11$DMSqOZvBVVZhNapXbc4bg.l7gnpcFW4tRahc/3VoHznUR1SjEKUDq", "", null, "seller" }
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2591), "", "", "$2a$11$RysNaeqo9.REJyHCzMHT8.szwZvuWkpipLmFh.W9tYsKTyz9KkT9a", "", null, "admin" },
+                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), null, new DateTime(2026, 3, 31, 14, 15, 48, 5, DateTimeKind.Utc).AddTicks(5348), "", "", "$2a$11$rXq1htqYod0yT6D/ZigRQe9IbbqMeRJyaLs1NvFlI2PpDKJX7GqWS", "", null, "seller" }
                 });
 
             migrationBuilder.InsertData(

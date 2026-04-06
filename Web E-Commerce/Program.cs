@@ -8,6 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Web_E_Commerce.Data;
 using Web_E_Commerce.DTOs.Order.Validators;
+using Web_E_Commerce.Payments.Factory.Implementations;
+using Web_E_Commerce.Payments.Factory.Interfaces;
+using Web_E_Commerce.Payments.Gateways.Implementations;
+using Web_E_Commerce.Payments.Gateways.Interfaces;
 using Web_E_Commerce.Repositories.Implementations;
 using Web_E_Commerce.Repositories.Interfaces;
 using Web_E_Commerce.Services.Implementations;
@@ -94,6 +98,13 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<ISellerRequestService, SellerRequestService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Services.AddScoped<IPaymentGateway, VNPayGateway>();
+builder.Services.AddScoped<IPaymentGateway, CODGateway>();
+builder.Services.AddScoped<IPaymentGateway, MomoGateway>();
+
+builder.Services.AddScoped<IPaymentGatewayFactory, PaymentGatewayFactory>();
 
 // Add HttpContextAccessor
 builder.Services.AddHttpContextAccessor();

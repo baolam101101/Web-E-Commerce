@@ -9,7 +9,6 @@ namespace Web_E_Commerce.Repositories.Interfaces
         Task<List<Order>> GetByUserIdAsync(Guid userId);
         Task<List<Order>> GetAllAsync(); // admin
         Task AddAsync(Order order);
-        Task AddRangeItemsAsync(List<OrderItem> items);
         Task SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
     }

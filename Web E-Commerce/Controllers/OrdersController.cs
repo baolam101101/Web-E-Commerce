@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web_E_Commerce.DTOs.Admin.Orders;
 using Web_E_Commerce.DTOs.Order.Requests;
 using Web_E_Commerce.DTOs.Shared;
 using Web_E_Commerce.Enums;
@@ -41,10 +42,19 @@ namespace Web_E_Commerce.Controllers
         // ADMIN
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] OrderQueryRequest request)
         {
-            // optional nếu bạn làm admin dashboard
-            return Ok();
+            var response = await orderService.GetAllAsync(request);
+            return Ok(response);
+        }
+
+        // ADMIN
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(Guid id, UpdateOrderStatusRequest request)
+        {
+            var response = await orderService.UpdateStatusAsync(id, request);
+            return Ok(response);
         }
     }
 }

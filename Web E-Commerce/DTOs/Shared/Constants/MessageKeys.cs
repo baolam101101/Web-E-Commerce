@@ -100,5 +100,11 @@
         public const string GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
         public const string GET_ORDERS_SUCCESS = "GET_ORDERS_SUCCESS";
         public const string CREATE_ORDER_SUCCESS = "CREATE_ORDER_SUCCESS";
+        public const string ORDER_ALREADY_FINALIZED = "ORDER_ALREADY_FINALIZED";
+        public const string INVALID_ORDER_STATUS_TRANSITION = "INVALID_ORDER_STATUS_TRANSITION";
+        public const string UPDATE_ORDER_STATUS_SUCCESS = "UPDATE_ORDER_STATUS_SUCCESS";
+
+        // ===== Payment =====
+        public const string PAYMENT_NOT_FOUND = "PAYMENT_NOT_FOUND";
     }
 }
