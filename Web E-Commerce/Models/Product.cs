@@ -15,9 +15,5 @@ namespace Web_E_Commerce.Models
         public int Sold { get; set; }
         public Guid CategoryId { get; set; }
         public Category? Category { get; set; }
-
-        // Audit fields
-        public string CreatedBy { get; set; } = string.Empty;
-        public string? UpdatedBy { get; set; }
     }
 }

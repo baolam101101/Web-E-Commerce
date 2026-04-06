@@ -1,7 +1,6 @@
 ﻿using Web_E_Commerce.DTOs.Client.Product.Requests;
 using Web_E_Commerce.DTOs.Client.Product.Responses;
 using Web_E_Commerce.DTOs.Shared;
-using Web_E_Commerce.Models;
 
 
 namespace Web_E_Commerce.Services.Interfaces
@@ -15,6 +14,6 @@ namespace Web_E_Commerce.Services.Interfaces
         Task<ApiResponse<ProductResponse>> CreateAsync(ProductCreateRequest request);
         Task<ApiResponse<ProductResponse>> UpdateAsync(Guid id, ProductUpdateRequest request);
         Task<ApiResponse<bool>> DeleteAsync(Guid id);
-        Task<ApiResponse<int>> IncrementViewAsync(string slug);
+        Task<ApiResponse<int>> IncrementViewAsync(Guid id);
     }
 }

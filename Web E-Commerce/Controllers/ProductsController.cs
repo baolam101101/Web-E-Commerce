@@ -45,10 +45,10 @@ namespace Web_E_Commerce.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("{slug}/view")]
-        public async Task<ApiResponse<int>> IncreaseView(string slug)
+        [HttpPost("{id}/view")]
+        public async Task<ApiResponse<int>> IncreaseView(Guid id)
         {
-            return await productService.IncrementViewAsync(slug);
+            return await productService.IncrementViewAsync(id);
         }
 
         [Authorize(Roles = "Admin, Seller")]

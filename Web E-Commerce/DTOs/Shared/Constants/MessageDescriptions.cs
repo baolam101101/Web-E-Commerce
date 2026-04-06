@@ -107,5 +107,10 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
         public const string ORDER_NOT_FOUND = "The specified order does not exist.";
         public const string GET_ORDER_SUCCESS = "Order retrieved successfully.";
         public const string GET_ORDERS_SUCCESS = "Orders retrieved successfully.";
+        public const string ORDER_ALREADY_FINALIZED = "Order has already been finalized.";
+        public const string UPDATE_ORDER_STATUS_SUCCESS = "Order status updated successfully.";
+
+        // ===== Payment =====
+        public const string PAYMENT_NOT_FOUND = "The specified payment does not exist.";
     }
 }

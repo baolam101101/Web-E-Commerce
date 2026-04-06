@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Web_E_Commerce.Models;
+using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        ICurrentUserService currentUser) : DbContext(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        private readonly ICurrentUserService _currentUser = currentUser;
 
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
@@ -21,6 +25,13 @@ namespace Web_E_Commerce.Data
         public DbSet<ProductReview> ProductReviews { get; set; }
         public DbSet<SellerRequest> SellerRequests { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+        {
+            builder
+                .Properties<Enum>()
+                .HaveConversion<string>();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -122,15 +133,7 @@ namespace Web_E_Commerce.Data
             modelBuilder.Entity<CartItem>()
                 .Property(ci => ci.PriceAtTime)
                 .HasPrecision(18, 2);
-
-            modelBuilder.Entity<Order>()
-                .Property(o => o.OrderStatus)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<Order>()
-                .Property(o => o.PaymentStatus)
-                .HasConversion<string>();
-
+            
             // Configure many-to-many User <->Role
             modelBuilder.Entity<UserRole>()
                 .HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -148,9 +151,6 @@ namespace Web_E_Commerce.Data
             // ============================
             // SellerRequest configuration
             // ============================
-            modelBuilder.Entity<SellerRequest>()
-                .Property(sr => sr.Status)
-                .HasConversion<string>();
 
             // Seller Request → User
             modelBuilder.Entity<SellerRequest>()
@@ -191,19 +191,6 @@ namespace Web_E_Commerce.Data
 
             modelBuilder.Entity<Payment>()
                 .HasIndex(p => p.OrderId);
-
-            // ========================
-            // GUID NEWSEQUENTIALID (chuỗi Guid tăng dần)
-            // ========================
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                if (typeof(BaseEntity).IsAssignableFrom(entity.ClrType))
-                {
-                    modelBuilder.Entity(entity.ClrType)
-                        .Property("Id")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-                }
-            }
 
             // Seed Roles
             var adminRoleId = Guid.Parse("11111111-1111-1111-1111-111111111111");
@@ -249,11 +236,13 @@ namespace Web_E_Commerce.Data
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.CreatedBy = _currentUser.UserId;
                 }
 
                 if (entry.State == EntityState.Modified)
                 {
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedBy = _currentUser.UserId;
                 }
             }
 

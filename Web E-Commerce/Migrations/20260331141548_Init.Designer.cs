@@ -12,8 +12,8 @@ using Web_E_Commerce.Data;
 namespace Web_E_Commerce.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260327201639_ConfigStatus")]
-    partial class ConfigStatus
+    [Migration("20260331141548_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,8 +29,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -79,8 +78,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -107,8 +105,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CartId")
                         .HasColumnType("uniqueidentifier");
@@ -143,8 +140,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -180,8 +176,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -193,8 +188,9 @@ namespace Web_E_Commerce.Migrations
                     b.Property<DateTime?>("PaidAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
@@ -231,8 +227,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -270,8 +265,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(18, 2)
@@ -306,8 +300,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -368,8 +361,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -431,8 +423,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -452,19 +443,19 @@ namespace Web_E_Commerce.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4171),
+                            CreatedAt = new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2487),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4174),
+                            CreatedAt = new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2491),
                             Name = "Seller"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4175),
+                            CreatedAt = new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2491),
                             Name = "Customer"
                         });
                 });
@@ -473,8 +464,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -510,8 +500,7 @@ namespace Web_E_Commerce.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -553,20 +542,20 @@ namespace Web_E_Commerce.Migrations
                         new
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 36, 884, DateTimeKind.Utc).AddTicks(4274),
+                            CreatedAt = new DateTime(2026, 3, 31, 14, 15, 47, 907, DateTimeKind.Utc).AddTicks(2591),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$95J/JamV61REGaMRMOlQs.CTwnEIXKtnbS8.cj.TeV2IJYtoaaPiK",
+                            PasswordHash = "$2a$11$RysNaeqo9.REJyHCzMHT8.szwZvuWkpipLmFh.W9tYsKTyz9KkT9a",
                             PhoneNumber = "",
                             UserName = "admin"
                         },
                         new
                         {
                             Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-                            CreatedAt = new DateTime(2026, 3, 27, 20, 16, 37, 35, DateTimeKind.Utc).AddTicks(3837),
+                            CreatedAt = new DateTime(2026, 3, 31, 14, 15, 48, 5, DateTimeKind.Utc).AddTicks(5348),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$JfOqGyhiodYc1apj.pbpV.rGt2gybUuwLHfOTlfs6goGxw0fZP6d6",
+                            PasswordHash = "$2a$11$rXq1htqYod0yT6D/ZigRQe9IbbqMeRJyaLs1NvFlI2PpDKJX7GqWS",
                             PhoneNumber = "",
                             UserName = "seller"
                         });

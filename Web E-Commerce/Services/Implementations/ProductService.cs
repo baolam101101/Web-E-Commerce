@@ -68,7 +68,12 @@ namespace Web_E_Commerce.Services.Implementations
         public async Task<ApiResponse<ProductResponse>> GetByIdAsync(Guid id)
         {
             var product = await productRepositories.GetByIdAsync(id)
-                ?? throw new NotFoundException(MessageKeys.PRODUCT_NOT_FOUND, MessageDescriptions.PRODUCT_NOT_FOUND);
+                ?? throw new NotFoundException(
+                    MessageKeys.PRODUCT_NOT_FOUND, 
+                    MessageDescriptions.PRODUCT_NOT_FOUND
+                );
+
+            await productRepositories.IncrementViewAsync(product.Id);
 
             var mapped = mapper.Map<ProductResponse>(product);
 
@@ -86,9 +91,6 @@ namespace Web_E_Commerce.Services.Implementations
                     MessageKeys.PRODUCT_NOT_FOUND,
                     MessageDescriptions.PRODUCT_NOT_FOUND
                 );
-
-            product.ViewCount += 1;
-            await productRepositories.UpdateAsync(product);
 
             var mapped = mapper.Map<ProductResponse>(product);
 
@@ -161,6 +163,7 @@ namespace Web_E_Commerce.Services.Implementations
 
             existing.Name = request.Name;
             existing.Description = request.Description;
+            existing.Stock = request.Stock;
             existing.Price = request.Price;
             existing.CategoryId = request.CategoryId;
 
@@ -197,9 +200,9 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        public async Task<ApiResponse<int>> IncrementViewAsync(string slug)
+        public async Task<ApiResponse<int>> IncrementViewAsync(Guid id)
         {
-            var product = await productRepositories.GetBySlugAsync(slug)
+            var product = await productRepositories.GetByIdAsync(id)
                 ?? throw new NotFoundException(
                     MessageKeys.PRODUCT_NOT_FOUND,
                     MessageDescriptions.PRODUCT_NOT_FOUND

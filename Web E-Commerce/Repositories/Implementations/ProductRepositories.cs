@@ -22,7 +22,6 @@ namespace Web_E_Commerce.Repositories.Implementations
             Guid excludeProductId)
         {
             return await _context.Products
-                .AsNoTracking()
                 .Where(p =>
                     p.CategoryId == categoryId &&
                     p.Id != excludeProductId)
@@ -38,10 +37,10 @@ namespace Web_E_Commerce.Repositories.Implementations
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task IncrementViewAsync(string slug)
+        public async Task IncrementViewAsync(Guid id)
         {
             await _context.Products
-                .Where(p => p.Slug == slug)
+                .Where(p => p.Id == id)
                 .ExecuteUpdateAsync(s =>
                     s.SetProperty(p => p.ViewCount, p => p.ViewCount + 1));
         }
@@ -146,6 +145,18 @@ namespace Web_E_Commerce.Repositories.Implementations
             return await _context.Products
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync();
+        }
+
+        public async Task<bool> UpdateStockAsync(Guid productId, int quantity)
+        {
+            var affectedRows = await _context.Products
+                .Where(p => p.Id == productId && p.Stock >= quantity)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.Stock, p => p.Stock - quantity)
+                    .SetProperty(p => p.Sold, p => p.Sold + quantity)
+                );
+
+            return affectedRows > 0;
         }
     }
 }
