@@ -20,31 +20,59 @@ namespace Web_E_Commerce.Services.Implementations
                 .FirstOrDefaultAsync(p => p.TransactionId == transactionId)
                 ?? throw new NotFoundException(
                     MessageKeys.PAYMENT_NOT_FOUND,
-                    MessageDescriptions.PAYMENT_NOT_FOUND);
+                    MessageDescriptions.PAYMENT_NOT_FOUND
+                );
 
             var order = await context.Orders
-                    .FirstOrDefaultAsync(o => o.Id == payment.OrderId)
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == payment.OrderId)
                 ?? throw new NotFoundException(
                     MessageKeys.ORDER_NOT_FOUND,
-                    MessageDescriptions.ORDER_NOT_FOUND);
+                    MessageDescriptions.ORDER_NOT_FOUND
+                );
 
-            // 🔥 gọi gateway (nếu cần verify chữ ký sau này)
+            var shipping = await context.Shippings
+                .FirstOrDefaultAsync(s => s.OrderId == order.Id);
+
             var gateway = paymentFactory.Get(order.PaymentMethod);
             await gateway.HandleCallback(transactionId, success);
 
+            // ❗ Tránh xử lý lại nhiều lần
+            if (payment.PaymentStatus == PaymentStatus.Paid)
+                return;
+
             if (success)
             {
-                order.PaymentStatus = PaymentStatus.Paid;
-                order.PaidAt = DateTime.UtcNow;
-                order.OrderStatus = OrderStatus.Completed;
-
                 payment.PaymentStatus = PaymentStatus.Paid;
+
+                order.PaymentStatus = PaymentStatus.Paid;
+                order.OrderStatus = OrderStatus.Processing;
+                order.PaidAt = DateTime.UtcNow;
+
+                if (shipping != null)
+                    shipping.Status = ShippingStatus.Packing;
             }
             else
             {
+                payment.PaymentStatus = PaymentStatus.Failed;
+
                 order.PaymentStatus = PaymentStatus.Failed;
                 order.OrderStatus = OrderStatus.Cancelled;
-                payment.PaymentStatus = PaymentStatus.Failed;
+
+                // 🔥 ROLLBACK STOCK
+                foreach (var item in order.OrderItems)
+                {
+                    var product = await context.Products
+                        .FirstOrDefaultAsync(p => p.Id == item.ProductId);
+
+                    if (product != null)
+                    {
+                        product.Stock += item.Quantity;
+                    }
+                }
+
+                if (shipping != null)
+                    shipping.Status = ShippingStatus.Failed;
             }
 
             await context.SaveChangesAsync();

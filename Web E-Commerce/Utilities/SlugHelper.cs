@@ -8,9 +8,9 @@ namespace Web_E_Commerce.Utilities
         {
             var slug = input.ToLower().Trim();
 
-            slug = Regex.Replace(slug, @"\s+", "-");
+            slug = Regex.Replace(slug, @"s+", "-");
 
-            slug = Regex.Replace(slug, @"[^a-z0-9\-]", "");
+            slug = Regex.Replace(slug, @"[^a-z0-9-]", "");
 
             return slug;
         }

@@ -7,6 +7,7 @@
         public string ProductName { get; set; } = string.Empty;
         public decimal PriceAtTime { get; set; }
         public int Quantity { get; set; }
+        public int Stock { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

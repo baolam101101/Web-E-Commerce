@@ -41,22 +41,30 @@ namespace Web_E_Commerce.Services.Implementations
                         MessageDescriptions.CART_NOT_FOUND
                     );
 
-                if (cart.CartItems.Count == 0)
+                if (!cart.CartItems.Any())
                     throw new BadRequestException(
                         MessageKeys.CART_EMPTY,
                         MessageDescriptions.CART_EMPTY
                     );
 
-                // load product 1 lần (đã đúng)
+                // ===== LOAD PRODUCTS =====
                 var productIds = cart.CartItems.Select(x => x.ProductId).ToList();
                 var products = await productRepositories.GetByIdsAsync(productIds);
-                var productDict = products.ToDictionary(p => p.Id);
+                var productDict = products.ToDictionary(x => x.Id);
 
                 var orderItems = new List<OrderItem>();
                 decimal totalAmount = 0;
 
+                // ===== VALIDATE + TRỪ STOCK =====
                 foreach (var item in cart.CartItems)
                 {
+                    if (!productDict.TryGetValue(item.ProductId, out var product))
+                        throw new NotFoundException(
+                            MessageKeys.PRODUCT_NOT_FOUND,
+                            MessageDescriptions.PRODUCT_NOT_FOUND
+                        );
+
+                    // 🔥 Atomic update stock
                     var success = await productRepositories.UpdateStockAsync(
                         item.ProductId,
                         item.Quantity
@@ -65,10 +73,8 @@ namespace Web_E_Commerce.Services.Implementations
                     if (!success)
                         throw new BadRequestException(
                             MessageKeys.NOT_ENOUGH_STOCK,
-                            MessageDescriptions.NOT_ENOUGH_STOCK
+                            $"Chỉ còn {product.Stock} sản phẩm"
                         );
-
-                    var product = productDict[item.ProductId];
 
                     var orderItem = new OrderItem
                     {
@@ -82,6 +88,7 @@ namespace Web_E_Commerce.Services.Implementations
                     orderItems.Add(orderItem);
                 }
 
+                // ===== CREATE ORDER =====
                 var order = new Order
                 {
                     Id = Guid.NewGuid(),
@@ -90,59 +97,67 @@ namespace Web_E_Commerce.Services.Implementations
                     OrderStatus = OrderStatus.Pending,
                     PaymentStatus = PaymentStatus.Pending,
                     PaymentMethod = request.PaymentMethod,
-                    ShippingAddress = request.ShippingAddress,
-                    PhoneNumber = request.PhoneNumber,
                     OrderItems = orderItems
                 };
 
+                // ===== CREATE SHIPPING =====
+                var shipping = new Shipping
+                {
+                    Order = order,
+                    ReceiverName = request.ReceiverName,
+                    PhoneNumber = request.PhoneNumber,
+                    Address = request.ShippingAddress,
+                    Status = ShippingStatus.Pending
+                };
+
+                context.Shippings.Add(shipping);
+
+                // ===== CREATE PAYMENT =====
                 var payment = new Payment
                 {
                     OrderId = order.Id,
-                    Amount = order.TotalAmount,
-                    PaymentStatus = PaymentStatus.Pending,
-                    PaymentMethod = request.PaymentMethod
+                    Amount = totalAmount,
+                    PaymentMethod = request.PaymentMethod,
+                    PaymentStatus = PaymentStatus.Pending
                 };
 
                 context.Payments.Add(payment);
 
-                //  paymentgateway
+                // ===== PAYMENT GATEWAY =====
                 string? paymentUrl = null;
 
                 var gateway = paymentGatewayFactory.Get(request.PaymentMethod);
 
-                // LẤY BOTH url + transactionId
                 var (url, transactionId) = await gateway.CreatePaymentUrl(order);
 
+                payment.TransactionId = transactionId;
                 paymentUrl = url;
 
-                // lưu transactionId vào db
-                payment.TransactionId = transactionId;
-
-                // clear cart TRƯỚC khi save
+                // ===== CLEAR CART =====
                 cart.CartItems.Clear();
                 cart.TotalPrice = 0;
 
+                // ===== SAVE =====
                 await orderRepositories.AddAsync(order);
-                await orderRepositories.SaveChangesAsync();
+                await context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
 
                 var response = mapper.Map<OrderResponse>(order);
 
-                var result = new CheckoutResponse
-                {
-                    Order = response,
-                    PaymentUrl = paymentUrl
-                };
-
                 return ApiResponse<CheckoutResponse>.Ok(
-                    result,
+                    new CheckoutResponse
+                    {
+                        Order = response,
+                        PaymentUrl = paymentUrl
+                    },
                     MessageKeys.CREATE_ORDER_SUCCESS,
                     MessageDescriptions.CREATE_ORDER_SUCCESS
                 );
             }
             catch
             {
+                await transaction.RollbackAsync();
                 throw;
             }
         }
@@ -286,12 +301,31 @@ namespace Web_E_Commerce.Services.Implementations
             // UPDATE STATUS
             order.OrderStatus = request.Status;
 
-            // AUTO PAYMENT WHEN COMPLETED
-            if (request.Status == OrderStatus.Completed &&
-                order.PaymentStatus == PaymentStatus.Pending)
+            // AUTO PAYMENT + TĂNG SOLD KHI COMPLETED
+            if (request.Status == OrderStatus.Completed)
             {
-                order.PaymentStatus = PaymentStatus.Paid;
-                order.PaidAt = DateTime.UtcNow;
+                if (order.PaymentStatus == PaymentStatus.Pending)
+                {
+                    order.PaymentStatus = PaymentStatus.Paid;
+                    order.PaidAt = DateTime.UtcNow;
+                }
+
+                // Tăng Sold cho từng product trong order
+                var completedProductIds = order.OrderItems
+                    .Select(x => x.ProductId)
+                    .Distinct()
+                    .ToList();
+
+                var completedProducts = await productRepositories.GetByIdsAsync(completedProductIds);
+                var completedProductDict = completedProducts.ToDictionary(p => p.Id);
+
+                foreach (var item in order.OrderItems)
+                {
+                    if (completedProductDict.TryGetValue(item.ProductId, out var product))
+                    {
+                        product.Sold += item.Quantity;
+                    }
+                }
             }
 
             await orderRepositories.SaveChangesAsync();

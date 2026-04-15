@@ -100,9 +100,12 @@ namespace Web_E_Commerce.Repositories.Implementations
             }
 
             // Category
-            if (filter.CategoryId.HasValue)
+            if (filter.CategoryId.HasValue && filter.CategoryId != Guid.Empty)
             {
-                query = query.Where(p => p.CategoryId == filter.CategoryId);
+                var categoryId = filter.CategoryId.Value;
+
+                query = query.Where(p => p.CategoryId == categoryId);
+                Console.WriteLine($"CategoryId: {filter.CategoryId}");
             }
 
             // Min price

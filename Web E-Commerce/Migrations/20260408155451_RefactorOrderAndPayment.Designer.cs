@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web_E_Commerce.Data;
 
@@ -11,9 +12,11 @@ using Web_E_Commerce.Data;
 namespace Web_E_Commerce.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260408155451_RefactorOrderAndPayment")]
+    partial class RefactorOrderAndPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -606,7 +609,7 @@ namespace Web_E_Commerce.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Shippings");
+                    b.ToTable("Shipping");
                 });
 
             modelBuilder.Entity("Web_E_Commerce.Models.User", b =>
@@ -665,7 +668,7 @@ namespace Web_E_Commerce.Migrations
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$LPR8C4/63ShkCKNdnPJX/eXonrVmV/YTRSg88aOw5s85x0gFLWQs.",
+                            PasswordHash = "$2a$11$VgZK3Rq4.VBPzdbOQA.d.OancaVVtNo1yF1Ltj4KW1EuvxySf0k2y",
                             PhoneNumber = "",
                             UserName = "admin"
                         },
@@ -676,7 +679,7 @@ namespace Web_E_Commerce.Migrations
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$/nZsK.GGAK3Z7DjE7DJfxO0/iJNqP/H343b4I9OuOvSvcQsnjr80y",
+                            PasswordHash = "$2a$11$CLc275NZaNGU0jxAfBSvaetDlbxRVhAbdGNp4TRUS6wm6FkWQEhOG",
                             PhoneNumber = "",
                             UserName = "seller"
                         });

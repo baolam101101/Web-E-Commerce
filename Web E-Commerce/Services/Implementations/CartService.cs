@@ -69,10 +69,24 @@ namespace Web_E_Commerce.Services.Implementations
 
             if (existingItem != null)
             {
-                existingItem.Quantity += request.Quantity;
+                var newQuantity = existingItem.Quantity + request.Quantity;
+
+                if (newQuantity > product.Stock)
+                    throw new BadRequestException(
+                        MessageKeys.NOT_ENOUGH_STOCK,
+                        $"Chỉ còn {product.Stock - existingItem.Quantity} sản phẩm"
+                    );
+
+                existingItem.Quantity = newQuantity;
             }
             else
             {
+                if (request.Quantity > product.Stock)
+                    throw new BadRequestException(
+                        MessageKeys.NOT_ENOUGH_STOCK,
+                        MessageDescriptions.NOT_ENOUGH_STOCK
+                    );
+
                 cart.CartItems.Add(new CartItem
                 {
                     ProductId = product.Id,

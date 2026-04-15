@@ -9,5 +9,6 @@ namespace Web_E_Commerce.Models
         public PaymentMethod PaymentMethod {  get; set; }
         public PaymentStatus PaymentStatus { get; set; } 
         public string? TransactionId { get; set; } // Nếu tích hợp VNPay hoặc cổng thanh toán khác
+        public string? GatewayResponse { get; set; }
     }
 }

@@ -88,6 +88,8 @@ builder.Services.AddScoped<ISellerRequestRepositories, SellerRequestRepositories
 builder.Services.AddScoped<IRoleRepositories, RoleRepositories>();
 builder.Services.AddScoped<ICartRepositories, CartRepositories>();
 builder.Services.AddScoped<IOrderRepositories, OrderRepositories>();
+builder.Services.AddScoped<IProductReviewRepositories, ProductReviewRepositories>();
+builder.Services.AddScoped<IUserRepositories, UserRepositories>();
 
 // Add Service
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -99,6 +101,8 @@ builder.Services.AddScoped<ISellerRequestService, SellerRequestService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IProductReviewService, ProductReviewService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
 builder.Services.AddScoped<IPaymentGateway, VNPayGateway>();
 builder.Services.AddScoped<IPaymentGateway, CODGateway>();
@@ -112,14 +116,15 @@ builder.Services.AddHttpContextAccessor();
 // Add Policy
 
 
+// CORS
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("http://localhost:5174")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowFE",
+        policy => policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
 });
 
 var app = builder.Build();
@@ -137,7 +142,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors("AllowFE");
 
 app.UseAuthentication();
 app.UseAuthorization();
