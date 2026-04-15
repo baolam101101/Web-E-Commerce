@@ -1,11 +1,8 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web_E_Commerce.DTOs.Client.Product.Requests;
 using Web_E_Commerce.DTOs.Client.Product.Responses;
 using Web_E_Commerce.DTOs.Shared;
-using Web_E_Commerce.DTOs.Shared.Constants;
-using Web_E_Commerce.Services.Implementations;
 using Web_E_Commerce.Services.Interfaces;
 
 namespace Web_E_Commerce.Controllers
@@ -44,7 +41,7 @@ namespace Web_E_Commerce.Controllers
             return await productService.GetBySlugAsync(slug);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost("{id}/view")]
         public async Task<ApiResponse<int>> IncreaseView(Guid id)
         {

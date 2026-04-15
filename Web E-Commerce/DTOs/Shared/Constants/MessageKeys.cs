@@ -106,5 +106,25 @@
 
         // ===== Payment =====
         public const string PAYMENT_NOT_FOUND = "PAYMENT_NOT_FOUND";
+
+        // ===== Review =====
+        public const string GET_REVIEWS_SUCCESS = "GET_REVIEWS_SUCCESS";
+        public const string CREATE_REVIEW_SUCCESS = "CREATE_REVIEW_SUCCESS";
+        public const string UPDATE_REVIEW_SUCCESS = "UPDATE_REVIEW_SUCCESS";
+        public const string DELETE_REVIEW_SUCCESS = "DELETE_REVIEW_SUCCESS";
+        public const string REVIEW_NOT_FOUND = "REVIEW_NOT_FOUND";
+        public const string REVIEW_ALREADY_EXISTS = "REVIEW_ALREADY_EXISTS";
+        public const string REVIEW_PURCHASE_REQUIRED = "REVIEW_PURCHASE_REQUIRED";
+        public const string INVALID_REVIEW_RATING = "INVALID_REVIEW_RATING";
+
+        // ===== User Profile =====
+        public const string GET_PROFILE_SUCCESS = "GET_PROFILE_SUCCESS";
+        public const string UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS";
+        public const string CHANGE_PASSWORD_SUCCESS = "CHANGE_PASSWORD_SUCCESS";
+        public const string EMAIL_ALREADY_TAKEN = "EMAIL_ALREADY_TAKEN";
+        public const string PASSWORD_CONFIRM_MISMATCH = "PASSWORD_CONFIRM_MISMATCH";
+        public const string PASSWORD_TOO_SHORT = "PASSWORD_TOO_SHORT";
+        public const string CURRENT_PASSWORD_INCORRECT = "CURRENT_PASSWORD_INCORRECT";
+        public const string PASSWORD_SAME_AS_OLD = "PASSWORD_SAME_AS_OLD";
     }
 }

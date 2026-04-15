@@ -112,5 +112,25 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
 
         // ===== Payment =====
         public const string PAYMENT_NOT_FOUND = "The specified payment does not exist.";
+
+        // ===== Review =====
+        public const string GET_REVIEWS_SUCCESS = "Reviews retrieved successfully.";
+        public const string CREATE_REVIEW_SUCCESS = "Review submitted successfully.";
+        public const string UPDATE_REVIEW_SUCCESS = "Review updated successfully.";
+        public const string DELETE_REVIEW_SUCCESS = "Review deleted successfully.";
+        public const string REVIEW_NOT_FOUND = "The specified review does not exist.";
+        public const string REVIEW_ALREADY_EXISTS = "You have already reviewed this product.";
+        public const string REVIEW_PURCHASE_REQUIRED = "You can only review products you have purchased and received.";
+        public const string INVALID_REVIEW_RATING = "Rating must be between 1 and 5.";
+
+        // ===== User Profile =====
+        public const string GET_PROFILE_SUCCESS = "Profile retrieved successfully.";
+        public const string UPDATE_PROFILE_SUCCESS = "Profile updated successfully.";
+        public const string CHANGE_PASSWORD_SUCCESS = "Password changed successfully.";
+        public const string EMAIL_ALREADY_TAKEN = "This email is already in use by another account.";
+        public const string PASSWORD_CONFIRM_MISMATCH = "New password and confirmation password do not match.";
+        public const string PASSWORD_TOO_SHORT = "Password must be at least 6 characters.";
+        public const string CURRENT_PASSWORD_INCORRECT = "Current password is incorrect.";
+        public const string PASSWORD_SAME_AS_OLD = "New password must be different from the current password.";
     }
 }

@@ -25,6 +25,7 @@ namespace Web_E_Commerce.Data
         public DbSet<ProductReview> ProductReviews { get; set; }
         public DbSet<SellerRequest> SellerRequests { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Shipping> Shippings { get; set; }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)
         {
@@ -92,6 +93,13 @@ namespace Web_E_Commerce.Data
                 .WithMany()
                 .HasForeignKey(p => p.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Relationship Order - Shipping
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Shipping)
+                .WithOne(s => s.Order)
+                .HasForeignKey<Shipping>(s => s.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Relationship ProductReview - Product 
             modelBuilder.Entity<ProductReview>()
