@@ -4,8 +4,8 @@ using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Web_E_Commerce.BackgroundServices;
 using Web_E_Commerce.Data;
 using Web_E_Commerce.DTOs.Order.Validators;
 using Web_E_Commerce.Payments.Factory.Implementations;
@@ -104,10 +104,15 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IProductReviewService, ProductReviewService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
+// Add Background Service
+builder.Services.AddHostedService<ExpiredTokenCleanupService>();
+
+// Add Payment Gateways
 builder.Services.AddScoped<IPaymentGateway, VNPayGateway>();
 builder.Services.AddScoped<IPaymentGateway, CODGateway>();
 builder.Services.AddScoped<IPaymentGateway, MomoGateway>();
 
+// Add Factory
 builder.Services.AddScoped<IPaymentGatewayFactory, PaymentGatewayFactory>();
 
 // Add HttpContextAccessor

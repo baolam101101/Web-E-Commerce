@@ -9,5 +9,6 @@ namespace Web_E_Commerce.Services.Interfaces
         Task<ApiResponse<AuthResponse>> Register(AuthRequest request);
         Task<ApiResponse<AuthResponse>> Login(AuthRequest request);
         Task<ApiResponse<AuthResponse>> RefreshTokenAsync(string refreshToken);
+        Task<ApiResponse<bool>> LogoutAsync(string refreshToken);
     }
 }

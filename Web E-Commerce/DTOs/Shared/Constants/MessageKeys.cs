@@ -80,6 +80,7 @@
         // ===== Auth =====
         public const string REGISTER_SUCCESS = "REGISTER_SUCCESS";
         public const string LOGIN_SUCCESS = "LOGIN_SUCCESS";
+        public const string LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
         // ===== Cart =====
         public const string CART_NOT_FOUND = "CART_NOT_FOUND";
