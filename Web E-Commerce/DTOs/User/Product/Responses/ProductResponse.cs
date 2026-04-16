@@ -14,5 +14,7 @@ namespace Web_E_Commerce.DTOs.Client.Product.Responses
         [Range(1, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
         public decimal Price { get; set; }
         public string CategoryName { get; set; } = string.Empty;
+        public Guid? SellerId { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

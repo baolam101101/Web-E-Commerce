@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web_E_Commerce.Data;
 
@@ -11,9 +12,11 @@ using Web_E_Commerce.Data;
 namespace Web_E_Commerce.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260416123102_AddSellerIdToProduct")]
+    partial class AddSellerIdToProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -670,7 +673,7 @@ namespace Web_E_Commerce.Migrations
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$t5B2r3evDxmIEt7lmfV00eFl8Fn1r25NXxISJMOFOt7USxdneQNSC",
+                            PasswordHash = "$2a$11$FsO64m5x.fxLG0tVXEPuRO1RtMACvWRZDn6wRRvP.zmmgQ0n.7fiK",
                             PhoneNumber = "",
                             UserName = "admin"
                         },
@@ -681,7 +684,7 @@ namespace Web_E_Commerce.Migrations
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$n1In2vxHOaBgwiPSwCAylOWpLcomBpBYBhb82Ju4bPBE8kbtDWdyi",
+                            PasswordHash = "$2a$11$amo/k8n2hZqN1bm5kYEzL.aVsxhD1mM.wyS2aFrqaH1TJuU6G1k4C",
                             PhoneNumber = "",
                             UserName = "seller"
                         });
