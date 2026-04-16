@@ -87,6 +87,7 @@ namespace Web_E_Commerce.DTOs.Shared.Constants
         // ===== Auth =====
         public const string USER_REGISTRATION_SUCCESS = "User registration successful.";
         public const string USER_LOGIN_SUCCESS = "User login successful.";
+        public const string LOGOUT_SUCCESS = "User logout successful.";
 
         // ===== Cart =====
         public const string CART_NOT_FOUND = "The specified cart does not exist.";

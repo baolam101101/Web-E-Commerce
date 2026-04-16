@@ -109,7 +109,26 @@ namespace Web_E_Commerce.Services.Implementations
             );
         }
 
-        private string GenerateRefreshToken()
+        public async Task<ApiResponse<bool>> LogoutAsync(string refreshToken)
+        {
+            var tokenInDb = await context.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+
+            // Không báo lỗi nếu token không tồn tại hoặc đã revoked
+            // — tránh leak thông tin, client vẫn coi là logout thành công
+            if (tokenInDb != null && !tokenInDb.IsRevoked)
+            {
+                tokenInDb.IsRevoked = true;
+                await context.SaveChangesAsync();
+            }
+
+            return ApiResponse<bool>.Ok(
+                true,
+                MessageKeys.LOGOUT_SUCCESS,
+                MessageDescriptions.LOGOUT_SUCCESS);
+        }
+
+        private static string GenerateRefreshToken()
         {
             var randomBytes = new byte[64];
 

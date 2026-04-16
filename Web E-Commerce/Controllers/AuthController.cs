@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Web_E_Commerce.DTOs.Auth.Requests;
 using Web_E_Commerce.DTOs.Auth.Responses;
 using Web_E_Commerce.Services.Interfaces;
@@ -20,6 +21,14 @@ namespace Web_E_Commerce.Controllers
         public async Task<IActionResult> Login(AuthRequest authRequest)
         {
             var response = await authService.Login(authRequest);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
+        {
+            var response = await authService.LogoutAsync(request.RefreshToken);
             return Ok(response);
         }
 
