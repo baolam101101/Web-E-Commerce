@@ -15,5 +15,9 @@ namespace Web_E_Commerce.Models
         public int Sold { get; set; }
         public Guid CategoryId { get; set; }
         public Category? Category { get; set; }
+
+        // Null = tạo bởi Admin, có giá trị = tạo bởi Seller
+        public Guid? SellerId { get; set; }
+        public User? Seller { get; set; }
     }
 }

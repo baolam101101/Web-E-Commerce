@@ -45,6 +45,14 @@ namespace Web_E_Commerce.Data
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Relationship Product - Seller (User), nullable
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Seller)
+                .WithMany()
+                .HasForeignKey(p => p.SellerId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
+
             // Relationship Order - User
             modelBuilder.Entity<Order>()
                 .HasOne<User>()
@@ -160,7 +168,7 @@ namespace Web_E_Commerce.Data
             // SellerRequest configuration
             // ============================
 
-            // Seller Request → User
+            // Seller Request → Seller (User) relationship
             modelBuilder.Entity<SellerRequest>()
                 .HasOne(ur => ur.User)
                 .WithMany()
@@ -194,11 +202,17 @@ namespace Web_E_Commerce.Data
             modelBuilder.Entity<Product>()
                 .HasIndex(p => p.CategoryId);
 
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.SellerId);
+
             modelBuilder.Entity<Order>()
                 .HasIndex(o => o.OrderStatus);
 
             modelBuilder.Entity<Payment>()
                 .HasIndex(p => p.OrderId);
+
+            modelBuilder.Entity<SellerRequest>()
+                .HasIndex(sr => sr.UserId);
 
             // Seed Roles
             var adminRoleId = Guid.Parse("11111111-1111-1111-1111-111111111111");

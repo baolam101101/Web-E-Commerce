@@ -16,6 +16,7 @@ namespace Web_E_Commerce.Services.Implementations
     public class ProductService(
         IProductRepositories productRepositories,
         ICategoryRepositories categoryRepositories,
+        ICurrentUserService currentUserService,
         IMapper mapper) : IProductService
     {
         public async Task<ApiResponse<PagedResult<ProductResponse>>> GetProductsAsync(ProductFilterDto filter)
@@ -141,6 +142,10 @@ namespace Web_E_Commerce.Services.Implementations
             product.NormalizedName = normalizedName;
             product.Slug = slug;
 
+            // Seller tạo thì gán SellerId, Admin tạo thì để null
+            if (currentUserService.Roles.Contains("Seller") && !currentUserService.Roles.Contains("Admin"))
+                product.SellerId = currentUserService.UserId;
+
             var created = await productRepositories.CreateAsync(product);
             var response = mapper.Map<ProductResponse>(created);
 
@@ -156,6 +161,15 @@ namespace Web_E_Commerce.Services.Implementations
             // check product exists
             var existing = await productRepositories.GetByIdAsync(id)
                 ?? throw new NotFoundException(MessageKeys.PRODUCT_NOT_FOUND, MessageDescriptions.PRODUCT_NOT_FOUND);
+
+            // Seller chỉ được sửa product của mình, Admin bypass
+            if (!currentUserService.Roles.Contains("Admin"))
+            {
+                if (existing.SellerId != currentUserService.UserId)
+                    throw new ForbiddenException(
+                        MessageKeys.FORBIDDEN,
+                        MessageDescriptions.FORBIDDEN);
+            }
 
             // check category exists
             var category = await categoryRepositories.GetByIdAsync(request.CategoryId)
@@ -181,6 +195,15 @@ namespace Web_E_Commerce.Services.Implementations
         {
             var product = await productRepositories.GetByIdAsync(id)
                 ?? throw new NotFoundException(MessageKeys.PRODUCT_NOT_FOUND, MessageDescriptions.PRODUCT_NOT_FOUND);
+
+            // Seller chỉ được xóa product của mình, Admin bypass
+            if (!currentUserService.Roles.Contains("Admin"))
+            {
+                if (product.SellerId != currentUserService.UserId)
+                    throw new ForbiddenException(
+                        MessageKeys.FORBIDDEN,
+                        MessageDescriptions.FORBIDDEN);
+            }
 
             // Lấy kết quả từ repository
             var result = await productRepositories.DeleteAsync(product);

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web_E_Commerce.Data;
 
@@ -11,9 +12,11 @@ using Web_E_Commerce.Data;
 namespace Web_E_Commerce.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260416131230_AddSellerIdToSellerRequest")]
+    partial class AddSellerIdToSellerRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -533,6 +536,9 @@ namespace Web_E_Commerce.Migrations
                     b.Property<DateTime>("RequestAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ShopName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -547,12 +553,9 @@ namespace Web_E_Commerce.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("SellerId");
 
                     b.ToTable("SellerRequests");
                 });
@@ -670,7 +673,7 @@ namespace Web_E_Commerce.Migrations
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$t5B2r3evDxmIEt7lmfV00eFl8Fn1r25NXxISJMOFOt7USxdneQNSC",
+                            PasswordHash = "$2a$11$vPt3rNZ.EesqxLOw6P6sm.ut/stcflOWj1gRjR4LWzz4iIkrdsJNq",
                             PhoneNumber = "",
                             UserName = "admin"
                         },
@@ -681,7 +684,7 @@ namespace Web_E_Commerce.Migrations
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "",
                             FullName = "",
-                            PasswordHash = "$2a$11$n1In2vxHOaBgwiPSwCAylOWpLcomBpBYBhb82Ju4bPBE8kbtDWdyi",
+                            PasswordHash = "$2a$11$wQXnRidSfKkBjH95lYRnYO1okM7yYi8uhSTTGVKQlQ3rKNy/BhpYe",
                             PhoneNumber = "",
                             UserName = "seller"
                         });
@@ -840,13 +843,13 @@ namespace Web_E_Commerce.Migrations
 
             modelBuilder.Entity("Web_E_Commerce.Models.SellerRequest", b =>
                 {
-                    b.HasOne("Web_E_Commerce.Models.User", "User")
+                    b.HasOne("Web_E_Commerce.Models.User", "Seller")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Web_E_Commerce.Models.Shipping", b =>
